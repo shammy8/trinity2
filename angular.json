@@ -108,6 +108,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "trinity2"
+    }
+  },
+  "defaultProject": "trinity2",
+  "cli": {
+    "analytics": false
+  }
 }
