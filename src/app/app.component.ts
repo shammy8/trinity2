@@ -4,7 +4,7 @@ import { Component, OnInit } from "@angular/core";
 @Component({
   selector: "trinity-root",
   template: `
-    Hi
+    <a routerLink="/area-maintenance">Area</a>
     <router-outlet></router-outlet>
   `,
   styles: [],
