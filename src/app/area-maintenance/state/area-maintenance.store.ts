@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { AreaMaintenance } from "./area-maintenance.model";
-import { EntityState, EntityStore, StoreConfig } from "@datorama/akita";
+import { Injectable } from '@angular/core';
+import { AreaMaintenance } from './area-maintenance.model';
+import { EntityState, EntityStore, StoreConfig } from '@datorama/akita';
 
 export interface AreaMaintenanceState extends EntityState<AreaMaintenance> {}
 
-@Injectable({ providedIn: "root" })
-@StoreConfig({ name: "areas" })
+@Injectable({ providedIn: 'root' })
+@StoreConfig({ name: 'areas', idKey: 'code' })
 export class AreaMaintenanceStore extends EntityStore<AreaMaintenanceState> {
   constructor() {
     super();
