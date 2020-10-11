@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AreaMaintenance } from '../state/area-maintenance.model';
 
 @Component({
   selector: 'trinity-area-table',
@@ -6,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styles: [],
 })
 export class AreaTableComponent implements OnInit {
-  @Input() data: any;
+  @Input() areas: AreaMaintenance[] | undefined;
 
   constructor() {}
 
