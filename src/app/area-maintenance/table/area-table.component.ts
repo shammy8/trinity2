@@ -7,7 +7,7 @@ import { AreaMaintenance } from '../state/area-maintenance.model';
   styles: [],
 })
 export class AreaTableComponent implements OnInit {
-  @Input() areas: AreaMaintenance[] | undefined;
+  @Input() areas: AreaMaintenance[] | null | undefined;
 
   constructor() {}
 
