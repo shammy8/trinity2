@@ -7,7 +7,8 @@ import { NG_ENTITY_SERVICE_CONFIG } from "@datorama/akita-ng-entity-service";
 import { AkitaNgDevtools } from "@datorama/akita-ngdevtools";
 import { AkitaNgRouterStoreModule } from "@datorama/akita-ng-router-store";
 import { environment } from "../environments/environment";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { AddWithCredentialsInterceptor } from "./add-with-credentials.interceptor";
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,7 +22,15 @@ import { HttpClientModule } from "@angular/common/http";
   providers: [
     {
       provide: NG_ENTITY_SERVICE_CONFIG,
-      useValue: { baseUrl: "https://jsonplaceholder.typicode.com" },
+      useValue: {
+        baseUrl:
+          "http://trp-abe-drmdev0:8170/TrinityHouseService/rest/TrinityApi",
+      },
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AddWithCredentialsInterceptor,
+      multi: true,
     },
   ],
   bootstrap: [AppComponent],
