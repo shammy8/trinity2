@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpMethod } from '@datorama/akita-ng-entity-service';
+import { Subscription } from 'rxjs';
 import { AreaMaintenance } from './state/area-maintenance.model';
 import { AreaMaintenanceQuery } from './state/area-maintenance.query';
 import { AreaMaintenanceService } from './state/area-maintenance.service';
@@ -22,10 +23,15 @@ import { AreaMaintenanceService } from './state/area-maintenance.service';
     ></trinity-area-detail>`,
   styles: [],
 })
-export class AreaMaintenanceComponent implements OnInit {
+export class AreaMaintenanceComponent implements OnInit, OnDestroy {
   areas$ = this.query.selectAll();
   activeArea: AreaMaintenance | null = null;
   isAdding: boolean = true;
+
+  getSub: Subscription | undefined;
+  updateSub: Subscription | undefined;
+  addSub: Subscription | undefined;
+  deleteSub: Subscription | undefined;
 
   constructor(
     private service: AreaMaintenanceService,
@@ -33,7 +39,9 @@ export class AreaMaintenanceComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.service.get({ mapResponseFn: (res: any) => res.areas }).subscribe();
+    this.getSub = this.service
+      .get({ mapResponseFn: (res: any) => res.areas })
+      .subscribe();
   }
 
   onRowSelect(area: AreaMaintenance) {
@@ -44,7 +52,7 @@ export class AreaMaintenanceComponent implements OnInit {
 
   onSaveForm(newArea: AreaMaintenance) {
     if (!this.isAdding) {
-      this.service
+      this.updateSub = this.service
         .update(
           newArea.code,
           // newArea
@@ -54,7 +62,7 @@ export class AreaMaintenanceComponent implements OnInit {
         // we use POST to update records but Akita has it strongly typed so it only allows put and patch
         .subscribe();
     } else {
-      this.service
+      this.addSub = this.service
         .add(
           { areas: [newArea] },
           { mapResponseFn: (res: any) => res.areas[0] }
@@ -69,6 +77,13 @@ export class AreaMaintenanceComponent implements OnInit {
   }
 
   onDelete() {
-    this.service.delete(this.query.getActiveId()).subscribe();
+    this.deleteSub = this.service.delete(this.query.getActiveId()).subscribe();
+  }
+
+  ngOnDestroy() {
+    this.getSub?.unsubscribe();
+    this.updateSub?.unsubscribe();
+    this.addSub?.unsubscribe();
+    this.deleteSub?.unsubscribe();
   }
 }
