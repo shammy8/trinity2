@@ -18,6 +18,7 @@ import { AreaMaintenanceService } from './state/area-maintenance.service';
       [area]="activeArea"
       (save)="onSaveForm($event)"
       (new)="onNew()"
+      (delete)="onDelete()"
     ></trinity-area-detail>`,
   styles: [],
 })
@@ -65,5 +66,9 @@ export class AreaMaintenanceComponent implements OnInit {
   onNew() {
     this.service.setActive(null);
     this.isAdding = true;
+  }
+
+  onDelete() {
+    this.service.delete(this.query.getActiveId()).subscribe();
   }
 }

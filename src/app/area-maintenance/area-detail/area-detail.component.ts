@@ -21,6 +21,7 @@ export class AreaDetailComponent implements OnInit, OnChanges {
   @Input() area: AreaMaintenance | null = null;
   @Output() save = new EventEmitter<AreaMaintenance>();
   @Output() new = new EventEmitter<AreaMaintenance>();
+  @Output() delete = new EventEmitter<number>();
 
   private ui: webix.ui.form | undefined;
 
@@ -47,6 +48,16 @@ export class AreaDetailComponent implements OnInit, OnChanges {
                 this.new.emit();
                 const form = webix.$$('details') as webix.ui.form;
                 form.clear();
+              },
+            },
+          },
+          {
+            view: 'button',
+            label: 'Delete',
+            width: '100',
+            on: {
+              onItemClick: () => {
+                this.delete.emit();
               },
             },
           },

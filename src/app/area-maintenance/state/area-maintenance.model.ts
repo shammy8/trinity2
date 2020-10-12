@@ -8,5 +8,12 @@ export interface AreaMaintenance {
 }
 
 export function createAreaMaintenance(params: Partial<AreaMaintenance>) {
-  return {} as AreaMaintenance;
+  return {
+    // code: 99,
+    // name: 'Trinity',
+    // geoSequence: 342,
+    // rowVersion: 123,
+    // hasPlaces: true,
+    // hasAddresses: true,
+  } as AreaMaintenance;
 }
