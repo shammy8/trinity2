@@ -39,14 +39,23 @@ export class AreaMaintenanceComponent implements OnInit {
   }
 
   onSaveForm(newArea: AreaMaintenance) {
-    this.service
-      .update(
-        newArea.code,
-        // newArea
-        { areas: [newArea] },
-        { method: HttpMethod.POST, mapResponseFn: (res: any) => res.areas[0] }
-      )
-      // we use POST to update records
-      .subscribe();
+    if (this.activeArea) {
+      this.service
+        .update(
+          newArea.code,
+          // newArea
+          { areas: [newArea] },
+          { method: HttpMethod.POST, mapResponseFn: (res: any) => res.areas[0] }
+        )
+        // we use POST to update records but Akita has it strongly typed so it only allows put and patch
+        .subscribe();
+    } else {
+      this.service
+        .add(
+          { areas: [newArea] },
+          { mapResponseFn: (res: any) => res.areas[0] }
+        )
+        .subscribe();
+    }
   }
 }

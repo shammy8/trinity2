@@ -12,7 +12,10 @@ export interface AreaMaintenanceState
     ActiveState {}
 
 @Injectable({ providedIn: 'root' })
-@StoreConfig({ name: 'areas', idKey: 'code' })
+@StoreConfig({
+  name: 'areas',
+  idKey: 'code',
+})
 export class AreaMaintenanceStore extends EntityStore<AreaMaintenanceState> {
   constructor() {
     super();
