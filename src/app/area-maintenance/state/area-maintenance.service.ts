@@ -7,7 +7,7 @@ import { NgEntityService } from '@datorama/akita-ng-entity-service';
 
 @Injectable({ providedIn: 'root' })
 export class AreaMaintenanceService extends NgEntityService<
-  AreaMaintenanceState
+  AreaMaintenanceState | any
 > {
   constructor(protected store: AreaMaintenanceStore) {
     super(store);

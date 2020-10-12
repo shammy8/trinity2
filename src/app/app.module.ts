@@ -3,7 +3,10 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NG_ENTITY_SERVICE_CONFIG } from '@datorama/akita-ng-entity-service';
+import {
+  HttpMethod,
+  NG_ENTITY_SERVICE_CONFIG,
+} from '@datorama/akita-ng-entity-service';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
 import { environment } from '../environments/environment';
@@ -25,6 +28,9 @@ import { AddWithCredentialsInterceptor } from './add-with-credentials.intercepto
       useValue: {
         baseUrl:
           'http://trp-abe-drmdev0:8170/TrinityHouseService/rest/TrinityApi',
+        httpMethods: {
+          PUT: HttpMethod.POST,
+        },
       },
     },
     {

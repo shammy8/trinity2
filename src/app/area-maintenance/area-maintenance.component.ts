@@ -14,7 +14,10 @@ import { AreaMaintenanceService } from './state/area-maintenance.service';
     height: 500px;
     display: block;"
     ></trinity-area-table>
-    <trinity-area-detail [area]="activeArea"></trinity-area-detail>`,
+    <trinity-area-detail
+      [area]="activeArea"
+      (save)="onSaveForm($event)"
+    ></trinity-area-detail>`,
   styles: [],
 })
 export class AreaMaintenanceComponent implements OnInit {
@@ -33,5 +36,9 @@ export class AreaMaintenanceComponent implements OnInit {
   onRowSelect(area: AreaMaintenance) {
     this.service.setActive(area.code);
     this.activeArea = this.query.getActive();
+  }
+
+  onSaveForm(newArea: AreaMaintenance) {
+    this.service.update(newArea.code, { areas: [newArea] }).subscribe();
   }
 }
