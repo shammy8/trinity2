@@ -13,7 +13,7 @@ export class AreaMaintenanceService extends NgEntityService<
     super(store);
   }
 
-  setActive(code: number) {
+  setActive(code: number | null) {
     this.store.setActive(code);
   }
 }

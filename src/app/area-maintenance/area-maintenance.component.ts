@@ -17,12 +17,14 @@ import { AreaMaintenanceService } from './state/area-maintenance.service';
     <trinity-area-detail
       [area]="activeArea"
       (save)="onSaveForm($event)"
+      (new)="onNew()"
     ></trinity-area-detail>`,
   styles: [],
 })
 export class AreaMaintenanceComponent implements OnInit {
   areas$ = this.query.selectAll();
   activeArea: AreaMaintenance | null = null;
+  isAdding: boolean = true;
 
   constructor(
     private service: AreaMaintenanceService,
@@ -36,10 +38,11 @@ export class AreaMaintenanceComponent implements OnInit {
   onRowSelect(area: AreaMaintenance) {
     this.service.setActive(area.code);
     this.activeArea = this.query.getActive();
+    this.isAdding = false;
   }
 
   onSaveForm(newArea: AreaMaintenance) {
-    if (this.activeArea) {
+    if (!this.isAdding) {
       this.service
         .update(
           newArea.code,
@@ -55,7 +58,12 @@ export class AreaMaintenanceComponent implements OnInit {
           { areas: [newArea] },
           { mapResponseFn: (res: any) => res.areas[0] }
         )
-        .subscribe();
+        .subscribe(() => this.onRowSelect(newArea));
     }
+  }
+
+  onNew() {
+    this.service.setActive(null);
+    this.isAdding = true;
   }
 }

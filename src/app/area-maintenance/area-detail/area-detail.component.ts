@@ -20,6 +20,7 @@ import { AreaMaintenance } from '../state/area-maintenance.model';
 export class AreaDetailComponent implements OnInit, OnChanges {
   @Input() area: AreaMaintenance | null = null;
   @Output() save = new EventEmitter<AreaMaintenance>();
+  @Output() new = new EventEmitter<AreaMaintenance>();
 
   private ui: webix.ui.form | undefined;
 
@@ -37,6 +38,18 @@ export class AreaDetailComponent implements OnInit, OnChanges {
         css: 'form-header-content',
         elements: [
           { view: 'button', label: 'Discard', width: '100' },
+          {
+            view: 'button',
+            label: 'New',
+            width: '100',
+            on: {
+              onItemClick: () => {
+                this.new.emit();
+                const form = webix.$$('details') as webix.ui.form;
+                form.clear();
+              },
+            },
+          },
           {
             view: 'button',
             label: 'Save',
