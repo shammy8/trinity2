@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { HttpMethod } from '@datorama/akita-ng-entity-service';
 import { AreaMaintenance } from './state/area-maintenance.model';
 import { AreaMaintenanceQuery } from './state/area-maintenance.query';
 import { AreaMaintenanceService } from './state/area-maintenance.service';
@@ -39,6 +39,14 @@ export class AreaMaintenanceComponent implements OnInit {
   }
 
   onSaveForm(newArea: AreaMaintenance) {
-    this.service.update(newArea.code, { areas: [newArea] }).subscribe();
+    this.service
+      .update(
+        newArea.code,
+        // newArea
+        { areas: [newArea] },
+        { method: HttpMethod.POST, mapResponseFn: (res: any) => res.areas[0] }
+      )
+      // we use POST to update records
+      .subscribe();
   }
 }
