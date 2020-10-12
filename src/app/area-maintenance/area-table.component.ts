@@ -9,7 +9,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { AreaMaintenance } from '../state/area-maintenance.model';
+import { AreaMaintenance } from './state/area-maintenance.model';
 
 @Component({
   selector: 'trinity-area-table',
@@ -18,7 +18,7 @@ import { AreaMaintenance } from '../state/area-maintenance.model';
 })
 export class AreaTableComponent implements OnInit, OnDestroy, OnChanges {
   @Input() areas: AreaMaintenance[] | null = null;
-  @Output() onRowSelect = new EventEmitter<AreaMaintenance>();
+  @Output() rowSelect = new EventEmitter<AreaMaintenance>();
 
   private ui: webix.ui.datatable | undefined;
   private columnConfig = [
@@ -53,7 +53,7 @@ export class AreaTableComponent implements OnInit, OnDestroy, OnChanges {
       select: 'row',
       on: {
         onAfterSelect: (id: number) =>
-          this.onRowSelect.emit(this.ui?.getItem(id)),
+          this.rowSelect.emit(this.ui?.getItem(id)),
       },
     }) as webix.ui.datatable;
 

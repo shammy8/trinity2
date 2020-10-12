@@ -7,19 +7,19 @@ import { AreaMaintenanceService } from './state/area-maintenance.service';
 @Component({
   selector: 'trinity-area-maintenance',
   template: `<trinity-area-table
-    [areas]="areas$ | async"
-    (onRowSelect)="showDetails($event)"
-    style="
+      [areas]="areas$ | async"
+      (rowSelect)="onRowSelect($event)"
+      style="
     width:100%;
     height: 500px;
     display: block;"
-  ></trinity-area-table>`,
+    ></trinity-area-table>
+    <trinity-area-detail [area]="activeArea"></trinity-area-detail>`,
   styles: [],
 })
 export class AreaMaintenanceComponent implements OnInit {
   areas$ = this.query.selectAll();
-  areas: AreaMaintenance[] | undefined;
-  selectedArea$: Observable<AreaMaintenance> | null = null;
+  activeArea: AreaMaintenance | null = null;
 
   constructor(
     private service: AreaMaintenanceService,
@@ -30,7 +30,8 @@ export class AreaMaintenanceComponent implements OnInit {
     this.service.get({ mapResponseFn: (res: any) => res.areas }).subscribe();
   }
 
-  showDetails(area: AreaMaintenance) {
-    console.log(area);
+  onRowSelect(area: AreaMaintenance) {
+    this.service.setActive(area.code);
+    this.activeArea = this.query.getActive();
   }
 }
