@@ -1,15 +1,66 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { AreaMaintenance } from '../state/area-maintenance.model';
 
 @Component({
   selector: 'trinity-area-table',
-  templateUrl: './area-table.component.html',
+  template: ``,
   styles: [],
 })
-export class AreaTableComponent implements OnInit {
-  @Input() areas: AreaMaintenance[] | null | undefined;
+export class AreaTableComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() areas: AreaMaintenance[] | null = null;
+  @Output() onRowSelect = new EventEmitter<AreaMaintenance>();
 
-  constructor() {}
+  private ui: webix.ui.datatable | undefined;
+  private columnConfig = [
+    {
+      id: 'code',
+      header: 'Code',
+      sort: 'int',
+      width: '100',
+    },
+    { id: 'name', header: 'Name', sort: 'string', width: '300' },
+    { id: 'geoSequence', header: 'Sequence', sort: 'int', width: '100' },
+  ];
 
-  ngOnInit(): void {}
+  constructor(private root: ElementRef) {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.areas.currentValue[0]) {
+      this.areas = changes.areas.currentValue;
+      this.ui?.clearAll();
+      this.ui?.parse(JSON.stringify(this.areas), 'json');
+      this.ui?.refresh();
+    }
+  }
+
+  ngOnInit() {
+    this.ui = webix.ui({
+      id: 'table',
+      container: this.root.nativeElement,
+      view: 'datatable',
+      columns: this.columnConfig,
+      data: [],
+      select: 'row',
+      on: {
+        onAfterSelect: (id: number) =>
+          this.onRowSelect.emit(this.ui?.getItem(id)),
+      },
+    }) as webix.ui.datatable;
+
+    this.ui.resize();
+  }
+
+  ngOnDestroy() {
+    this.ui?.destructor();
+  }
 }
