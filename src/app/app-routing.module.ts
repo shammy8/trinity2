@@ -1,12 +1,19 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: "area-maintenance",
+    path: 'area-maintenance',
     loadChildren: () =>
-      import("./area-maintenance/area-maintenance.module").then(
+      import('./area-maintenance/area-maintenance.module').then(
         (m) => m.AreaMaintenanceModule
+      ),
+  },
+  {
+    path: 'place-maintenance',
+    loadChildren: () =>
+      import('./place-maintenance/place-maintenance.module').then(
+        (m) => m.PlaceMaintenanceModule
       ),
   },
 ];
