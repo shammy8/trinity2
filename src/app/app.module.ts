@@ -12,6 +12,8 @@ import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
 import { environment } from '../environments/environment';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AddWithCredentialsInterceptor } from './add-with-credentials.interceptor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,6 +23,8 @@ import { AddWithCredentialsInterceptor } from './add-with-credentials.intercepto
     environment.production ? [] : AkitaNgDevtools.forRoot(),
     AkitaNgRouterStoreModule.forRoot(),
     HttpClientModule,
+    BrowserAnimationsModule,
+    MatTabsModule,
   ],
   providers: [
     {

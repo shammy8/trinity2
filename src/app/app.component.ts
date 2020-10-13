@@ -4,13 +4,30 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'trinity-root',
   template: `
-    <a routerLink="/area-maintenance">Area</a> |
-    <a routerLink="/place-maintenance">Place</a>
+    <nav mat-tab-nav-bar backgroundColor="primary" animationDuration="2000ms">
+      <a
+        mat-tab-link
+        *ngFor="let link of links"
+        [routerLink]="link.path"
+        routerLinkActive
+        #rla="routerLinkActive"
+        [routerLinkActiveOptions]="{ exact: true }"
+        [active]="rla.isActive"
+      >
+        {{ link.label }}
+      </a>
+    </nav>
+
     <router-outlet></router-outlet>
   `,
   styles: [],
 })
 export class AppComponent implements OnInit {
+  links = [
+    { path: 'area-maintenance', label: 'Area' },
+    { path: 'place-maintenance', label: 'Place' },
+  ];
+
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
@@ -20,5 +37,9 @@ export class AppComponent implements OnInit {
         {}
       )
       .subscribe();
+  }
+
+  addNewTab() {
+    this.links.push({ path: 'place-maintenance', label: 'Place' });
   }
 }
