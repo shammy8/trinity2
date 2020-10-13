@@ -4,11 +4,12 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { AreaMaintenance } from '../state/area-maintenance.model';
+import { AreaMaintenance } from './state/area-maintenance.model';
 
 @Component({
   selector: 'trinity-area-detail',
@@ -17,7 +18,7 @@ import { AreaMaintenance } from '../state/area-maintenance.model';
   `,
   styles: [],
 })
-export class AreaDetailComponent implements OnInit, OnChanges {
+export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
   @Input() area: AreaMaintenance | null = null;
   @Output() save = new EventEmitter<AreaMaintenance>();
   @Output() new = new EventEmitter<AreaMaintenance>();
@@ -92,5 +93,9 @@ export class AreaDetailComponent implements OnInit, OnChanges {
         ],
       }) as webix.ui.form;
     });
+  }
+
+  ngOnDestroy() {
+    this.ui?.destructor();
   }
 }
