@@ -8,7 +8,7 @@ import {
 } from '@datorama/akita';
 
 export interface AreaMaintenanceState
-  extends EntityState<AreaMaintenance>,
+  extends EntityState<AreaMaintenance, string>,
     ActiveState {}
 
 @Injectable({ providedIn: 'root' })

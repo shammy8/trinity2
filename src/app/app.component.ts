@@ -17,7 +17,7 @@ import { Component, OnInit } from '@angular/core';
         {{ link.label }}
       </a>
     </nav>
-
+    <br />
     <router-outlet></router-outlet>
   `,
   styles: [],
