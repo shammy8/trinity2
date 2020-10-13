@@ -31,12 +31,15 @@ export class PlaceTableComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private root: ElementRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.places.currentValue[0]) {
-      this.places = changes.places.currentValue;
-      this.ui?.clearAll();
-      this.ui?.parse(JSON.stringify(this.places), 'json');
-      this.ui?.refresh();
-    }
+    setTimeout(() => {
+      // used set timeout here because ngonchanges runs before ngoninit
+      if (changes.places.currentValue[0]) {
+        this.places = changes.places.currentValue;
+        this.ui?.clearAll();
+        this.ui?.parse(JSON.stringify(this.places), 'json');
+        this.ui?.refresh();
+      }
+    });
   }
 
   ngOnInit() {
