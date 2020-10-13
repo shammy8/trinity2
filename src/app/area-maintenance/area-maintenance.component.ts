@@ -7,7 +7,8 @@ import { AreaMaintenanceService } from './state/area-maintenance.service';
 
 @Component({
   selector: 'trinity-area-maintenance',
-  template: `<trinity-area-table
+  template: ` <button (click)="sequence()">x10</button>
+    <trinity-area-table
       [areas]="areas$ | async"
       (rowSelect)="onRowSelect($event)"
       style="
@@ -32,6 +33,7 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
   updateSub: Subscription | undefined;
   addSub: Subscription | undefined;
   deleteSub: Subscription | undefined;
+  sequenceSub: Subscription | undefined;
 
   constructor(
     private service: AreaMaintenanceService,
@@ -80,10 +82,15 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
     this.deleteSub = this.service.delete(this.query.getActiveId()).subscribe();
   }
 
+  sequence() {
+    this.sequenceSub = this.service.sequence().subscribe();
+  }
+
   ngOnDestroy() {
     this.getSub?.unsubscribe();
     this.updateSub?.unsubscribe();
     this.addSub?.unsubscribe();
     this.deleteSub?.unsubscribe();
+    this.sequenceSub?.unsubscribe();
   }
 }

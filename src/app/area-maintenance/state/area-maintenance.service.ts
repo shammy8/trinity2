@@ -4,6 +4,7 @@ import {
   AreaMaintenanceState,
 } from './area-maintenance.store';
 import { NgEntityService } from '@datorama/akita-ng-entity-service';
+import { tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AreaMaintenanceService extends NgEntityService<
@@ -15,5 +16,14 @@ export class AreaMaintenanceService extends NgEntityService<
 
   setActive(code: number | null) {
     this.store.setActive(code);
+  }
+
+  sequence() {
+    return this.getHttp()
+      .post<any>(
+        `${this.getConfig().baseUrl}/${this.resourceName}/sequenceAreas`,
+        {}
+      )
+      .pipe(tap((res) => this.store.set(res.areas)));
   }
 }
