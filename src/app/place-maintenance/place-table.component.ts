@@ -1,12 +1,5 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { PlaceMaintenance } from './state/place-maintenance.model';
 
 @Component({
@@ -14,8 +7,10 @@ import { PlaceMaintenance } from './state/place-maintenance.model';
   template: ``,
   styles: [],
 })
-export class PlaceTableComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() places: PlaceMaintenance[] | null = null;
+export class PlaceTableComponent implements OnInit, OnDestroy {
+  @Input() places$: Observable<PlaceMaintenance[]> | null = null;
+  places: PlaceMaintenance[] | null = null;
+  placesSub: Subscription | undefined;
 
   private ui: webix.ui.datatable | undefined;
   private columnConfig = [
@@ -29,18 +24,6 @@ export class PlaceTableComponent implements OnInit, OnDestroy, OnChanges {
     { id: 'areaCode', header: 'Area Code', sort: 'int', width: '100' },
   ];
   constructor(private root: ElementRef) {}
-
-  ngOnChanges(changes: SimpleChanges) {
-    setTimeout(() => {
-      // used set timeout here because ngonchanges runs before ngoninit
-      if (changes.places.currentValue[0]) {
-        this.places = changes.places.currentValue;
-        this.ui?.clearAll();
-        this.ui?.parse(JSON.stringify(this.places), 'json');
-        this.ui?.refresh();
-      }
-    });
-  }
 
   ngOnInit() {
     this.ui = webix.ui({
@@ -56,10 +39,18 @@ export class PlaceTableComponent implements OnInit, OnDestroy, OnChanges {
       // },
     }) as webix.ui.datatable;
 
+    this.placesSub = this.places$?.subscribe((places) => {
+      this.places = places;
+      this.ui?.clearAll();
+      this.ui?.parse(JSON.stringify(this.places), 'json');
+      this.ui?.refresh();
+    });
+
     this.ui.resize();
   }
 
   ngOnDestroy() {
     this.ui?.destructor();
+    this.placesSub?.unsubscribe();
   }
 }
