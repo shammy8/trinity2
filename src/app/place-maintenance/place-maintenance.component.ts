@@ -6,7 +6,13 @@ import { PlaceMaintenanceService } from './state/place-maintenance.service';
 
 @Component({
   selector: 'trinity-place-maintenance',
-  template: `<pre>{{ places$ | async | json }}</pre>`,
+  template: `<trinity-place-table
+    [places]="places$ | async"
+    style="
+      width:100%;
+      height: 500px;
+      display: block;"
+  ></trinity-place-table>`,
   styles: [],
 })
 export class PlaceMaintenanceComponent implements OnInit, OnDestroy {
