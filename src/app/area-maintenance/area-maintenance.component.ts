@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HttpMethod } from '@datorama/akita-ng-entity-service';
 import { Subscription } from 'rxjs';
+import { AreaTableComponent } from './area-table.component';
 import { AreaMaintenance } from './state/area-maintenance.model';
 import { AreaMaintenanceQuery } from './state/area-maintenance.query';
 import { AreaMaintenanceService } from './state/area-maintenance.service';
@@ -9,6 +10,7 @@ import { AreaMaintenanceService } from './state/area-maintenance.service';
   selector: 'trinity-area-maintenance',
   template: ` <button (click)="sequence()">x10</button>
     <trinity-area-table
+      #tableComponent
       [areas]="areas$ | async"
       (rowSelect)="onRowSelect($event)"
       style="
@@ -35,6 +37,8 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
   deleteSub: Subscription | undefined;
   sequenceSub: Subscription | undefined;
 
+  @ViewChild('tableComponent') tableComponent: AreaTableComponent | undefined;
+
   constructor(
     private service: AreaMaintenanceService,
     private query: AreaMaintenanceQuery
@@ -57,7 +61,6 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
       this.updateSub = this.service
         .update(
           newArea.code,
-          // newArea
           { areas: [newArea] },
           { method: HttpMethod.POST, mapResponseFn: (res: any) => res.areas[0] }
         )
@@ -83,7 +86,10 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
   }
 
   sequence() {
-    this.sequenceSub = this.service.sequence().subscribe();
+    this.sequenceSub = this.service
+      .sequence()
+      .subscribe(this.tableComponent?.sortSequence);
+    // sorting after calling api doesn't work
   }
 
   ngOnDestroy() {

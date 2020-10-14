@@ -60,6 +60,10 @@ export class AreaTableComponent implements OnInit, OnDestroy, OnChanges {
     this.ui.resize();
   }
 
+  sortSequence() {
+    this.ui?.sort('geoSequence', 'asc', 'int');
+  }
+
   ngOnDestroy() {
     this.ui?.destructor();
   }
