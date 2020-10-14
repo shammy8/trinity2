@@ -23,6 +23,7 @@ import { AreaMaintenanceService } from './state/area-maintenance.service';
     ></trinity-area-table>
     <trinity-area-detail
       [area]="activeArea"
+      [isAdding]="isAdding"
       (save)="onSaveForm($event)"
       (delete)="onDelete()"
     ></trinity-area-detail>`,

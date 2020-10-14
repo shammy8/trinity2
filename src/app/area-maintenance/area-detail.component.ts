@@ -18,6 +18,7 @@ import { AreaMaintenance } from './state/area-maintenance.model';
 })
 export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
   @Input() area: AreaMaintenance | null = null;
+  @Input() isAdding: boolean = true;
   @Output() save = new EventEmitter<AreaMaintenance>();
   @Output() delete = new EventEmitter<number>();
 
@@ -27,7 +28,24 @@ export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private root: ElementRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    this.ui?.parse(changes.area.currentValue, 'json');
+    if (changes.area.currentValue) {
+      this.ui?.parse(changes.area.currentValue, 'json');
+    }
+
+    const form = webix.$$('area-details') as webix.ui.form;
+    if (!form) {
+      // ngOnChanges run before ngOnInit which is where the form gets intialised
+      // so need this stop the error
+      return;
+    }
+    if (changes.isAdding?.currentValue === false) {
+      form.elements['code'].config.readonly = true;
+      form.elements['code'].refresh();
+    } else {
+      const form = webix.$$('area-details') as webix.ui.form;
+      form.elements['code'].config.readonly = false;
+      form.elements['code'].refresh();
+    }
   }
 
   ngOnInit(): void {
