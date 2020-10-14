@@ -10,6 +10,7 @@ import { PlaceMaintenanceService } from './state/place-maintenance.service';
   template: `Area Code<input type="number" [(ngModel)]="areaCodeFilter" />
     <button (click)="onSearch()">Search</button>
     <button (click)="undo()">Undo</button>
+    <button (click)="redo()">Redo</button>
     <trinity-place-table
       [places$]="places$"
       style="
@@ -53,6 +54,11 @@ export class PlaceMaintenanceComponent implements OnInit, OnDestroy {
   undo() {
     this.stateHistory?.undo();
     this.stateHistory?.undo();
+  }
+
+  redo() {
+    this.stateHistory?.redo();
+    this.stateHistory?.redo();
   }
 
   ngOnDestroy() {
