@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { NotificationService } from './notification.service';
 
 @Component({
   selector: 'trinity-root',
@@ -28,7 +29,10 @@ export class AppComponent implements OnInit {
     { path: 'place-maintenance', label: 'Place' },
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit() {
     this.http
@@ -37,6 +41,8 @@ export class AppComponent implements OnInit {
         {}
       )
       .subscribe();
+
+    this.notificationService.listen();
   }
 
   addNewTab() {
