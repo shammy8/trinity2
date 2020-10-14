@@ -19,6 +19,7 @@ import { AreaMaintenance } from './state/area-maintenance.model';
 export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
   @Input() area: AreaMaintenance | null = null;
   @Input() isAdding: boolean = true;
+  @Input() listOfCurrentAreaCodes: (number | null)[] = [];
   @Output() save = new EventEmitter<AreaMaintenance>();
   @Output() delete = new EventEmitter<number>();
 
@@ -28,7 +29,7 @@ export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private root: ElementRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.area.currentValue) {
+    if (changes.area?.currentValue) {
       this.ui?.parse(changes.area.currentValue, 'json');
     }
 
@@ -72,6 +73,7 @@ export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
             on: {
               onItemClick: () => {
                 const form = webix.$$('area-details') as webix.ui.form;
+                console.log(form.validate());
                 this.save.emit(form.getValues());
               },
             },
@@ -84,14 +86,39 @@ export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
         container: this.root.nativeElement,
         width: 300,
         view: 'form',
+        // how to disblae save button when form isn't valid
+        // ready: () => {
+        //   this.ui?.validate();
+        // },
+        rules: {
+          code: (value: number) => {
+            // todo validation not working
+            console.log(!this.listOfCurrentAreaCodes.includes(value));
+            return !this.listOfCurrentAreaCodes.includes(value);
+          },
+        },
         elements: [
-          { view: 'text', type: 'number', label: 'Area Code', name: 'code' },
-          { view: 'text', label: 'Area Name', name: 'name' },
+          {
+            view: 'text',
+            type: 'number',
+            label: 'Area Code',
+            name: 'code',
+            required: true,
+            labelWidth: 100,
+          },
+          {
+            view: 'text',
+            label: 'Area Name',
+            name: 'name',
+            required: true,
+            labelWidth: 100,
+          },
           {
             view: 'text',
             type: 'number',
             label: 'Sequence',
             name: 'geoSequence',
+            labelWidth: 100,
           },
         ],
       }) as webix.ui.form;

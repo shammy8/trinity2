@@ -24,6 +24,7 @@ import { AreaMaintenanceService } from './state/area-maintenance.service';
     <trinity-area-detail
       [area]="activeArea"
       [isAdding]="isAdding"
+      [listOfCurrentAreaCodes]="listOfCurrentAreaCodes"
       (save)="onSaveForm($event)"
       (delete)="onDelete()"
     ></trinity-area-detail>`,
@@ -33,12 +34,14 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
   areas$ = this.query.selectAll();
   activeArea: AreaMaintenance | null = null;
   isAdding: boolean = true;
+  listOfCurrentAreaCodes: (number | null)[] = [];
 
   getSub: Subscription | undefined;
   updateSub: Subscription | undefined;
   addSub: Subscription | undefined;
   deleteSub: Subscription | undefined;
   sequenceSub: Subscription | undefined;
+  listOfCurrentAreaCodesSub: Subscription | undefined;
 
   @ViewChild('tableComponent') tableComponent: AreaTableComponent | undefined;
 
@@ -53,6 +56,10 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
     this.getSub = this.service
       .get({ mapResponseFn: (res: any) => res.areas })
       .subscribe();
+
+    this.listOfCurrentAreaCodesSub = this.areas$.subscribe((areas) => {
+      this.listOfCurrentAreaCodes = areas.map((area) => area.code);
+    });
 
     webix.ready(() => {
       this.ui = webix.ui({
@@ -143,7 +150,7 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
     this.addSub?.unsubscribe();
     this.deleteSub?.unsubscribe();
     this.sequenceSub?.unsubscribe();
-
+    this.listOfCurrentAreaCodesSub?.unsubscribe();
     this.ui?.destructor();
   }
 }
