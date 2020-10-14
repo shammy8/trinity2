@@ -38,7 +38,7 @@ export class AreaTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.ui = webix.ui({
-      id: 'table',
+      id: 'area-table',
       container: this.root.nativeElement,
       view: 'datatable',
       columns: this.columnConfig,

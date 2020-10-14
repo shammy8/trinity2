@@ -65,6 +65,7 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
+    // get an array of all the area codes for validating area code in form
     this.listOfCurrentAreaCodesSub = this.areas$.subscribe((areas) => {
       this.listOfCurrentAreaCodes = areas.map((area) => area.code);
     });
@@ -91,6 +92,16 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
             on: {
               onItemClick: () => {
                 this.onNew();
+              },
+            },
+          },
+          {
+            view: 'button',
+            label: 'Export PDF',
+            width: '100',
+            on: {
+              onItemClick: () => {
+                webix.toPDF('area-table');
               },
             },
           },
