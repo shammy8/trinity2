@@ -1,5 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { StateHistoryPlugin } from '@datorama/akita';
 import { Subscription } from 'rxjs';
 import { PlaceMaintenanceQuery } from './state/place-maintenance.query';
 import { PlaceMaintenanceService } from './state/place-maintenance.service';
@@ -8,6 +9,7 @@ import { PlaceMaintenanceService } from './state/place-maintenance.service';
   selector: 'trinity-place-maintenance',
   template: `Area Code<input type="number" [(ngModel)]="areaCodeFilter" />
     <button (click)="onSearch()">Search</button>
+    <button (click)="undo()">Undo</button>
     <trinity-place-table
       [places$]="places$"
       style="
@@ -23,6 +25,8 @@ export class PlaceMaintenanceComponent implements OnInit, OnDestroy {
   areaCodeFilter: number | null = null;
   areaFilterSub: Subscription | undefined;
 
+  stateHistory: StateHistoryPlugin | undefined;
+
   constructor(
     private service: PlaceMaintenanceService,
     private query: PlaceMaintenanceQuery
@@ -32,6 +36,8 @@ export class PlaceMaintenanceComponent implements OnInit, OnDestroy {
     this.areaFilterSub = this.query.areaCodeFilter$.subscribe(
       (res) => (this.areaCodeFilter = res)
     );
+
+    this.stateHistory = new StateHistoryPlugin(this.query);
   }
 
   onSearch() {
@@ -42,6 +48,11 @@ export class PlaceMaintenanceComponent implements OnInit, OnDestroy {
     this.getSub = this.service
       .get({ mapResponseFn: (res: any) => res.places, params })
       .subscribe();
+  }
+
+  undo() {
+    this.stateHistory?.undo();
+    this.stateHistory?.undo();
   }
 
   ngOnDestroy() {
