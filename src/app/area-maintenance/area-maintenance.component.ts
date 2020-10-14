@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HttpMethod } from '@datorama/akita-ng-entity-service';
 import { Subscription } from 'rxjs';
+import { filter, switchMap } from 'rxjs/operators';
 import { AreaTableComponent } from './area-table.component';
 import {
   AreaMaintenance,
@@ -14,7 +15,7 @@ import { AreaMaintenanceService } from './state/area-maintenance.service';
   template: ` <div id="area-buttons"></div>
     <trinity-area-table
       #tableComponent
-      [areas]="areas$ | async"
+      [areas$]="areas$"
       (rowSelect)="onRowSelect($event)"
       style="
         width:100%;
@@ -53,8 +54,15 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.getSub = this.service
-      .get({ mapResponseFn: (res: any) => res.areas })
+    // only call api when there's no areas in the store
+    this.getSub = this.query
+      .selectHasCache()
+      .pipe(
+        filter((hasCache) => !hasCache),
+        switchMap(() =>
+          this.service.get({ mapResponseFn: (res: any) => res.areas })
+        )
+      )
       .subscribe();
 
     this.listOfCurrentAreaCodesSub = this.areas$.subscribe((areas) => {

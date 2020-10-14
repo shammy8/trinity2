@@ -3,12 +3,11 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
 } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { AreaMaintenance } from './state/area-maintenance.model';
 
 @Component({
@@ -16,8 +15,11 @@ import { AreaMaintenance } from './state/area-maintenance.model';
   template: ``,
   styles: [],
 })
-export class AreaTableComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() areas: AreaMaintenance[] | null = null;
+export class AreaTableComponent implements OnInit, OnDestroy {
+  @Input() areas$: Observable<AreaMaintenance[]> | null = null;
+  areas: AreaMaintenance[] | null = null;
+  areasSub: Subscription | undefined;
+
   @Output() rowSelect = new EventEmitter<AreaMaintenance>();
 
   private ui: webix.ui.datatable | undefined;
@@ -34,15 +36,6 @@ export class AreaTableComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(private root: ElementRef) {}
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.areas.currentValue[0]) {
-      this.areas = changes.areas.currentValue;
-      this.ui?.clearAll();
-      this.ui?.parse(JSON.stringify(this.areas), 'json');
-      this.ui?.refresh();
-    }
-  }
-
   ngOnInit() {
     this.ui = webix.ui({
       id: 'table',
@@ -58,6 +51,13 @@ export class AreaTableComponent implements OnInit, OnDestroy, OnChanges {
       },
     }) as webix.ui.datatable;
 
+    this.areasSub = this.areas$?.subscribe((areas) => {
+      this.areas = areas;
+      this.ui?.clearAll();
+      this.ui?.parse(JSON.stringify(this.areas), 'json');
+      this.ui?.refresh();
+    });
+
     this.ui.resize();
   }
 
@@ -67,5 +67,6 @@ export class AreaTableComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnDestroy() {
     this.ui?.destructor();
+    this.areasSub?.unsubscribe();
   }
 }
