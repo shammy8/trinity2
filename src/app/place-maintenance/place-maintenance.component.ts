@@ -23,7 +23,7 @@ import { PlaceMaintenanceService } from './state/place-maintenance.service';
 export class PlaceMaintenanceComponent implements OnInit, OnDestroy {
   places$ = this.query.selectAll();
   getSub: Subscription;
-  areaCodeFilter: number;
+  areaCodeFilter: number | null;
   areaFilterSub: Subscription;
 
   stateHistory: StateHistoryPlugin;
