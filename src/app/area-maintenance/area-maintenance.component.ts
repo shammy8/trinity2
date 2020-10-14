@@ -2,26 +2,28 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HttpMethod } from '@datorama/akita-ng-entity-service';
 import { Subscription } from 'rxjs';
 import { AreaTableComponent } from './area-table.component';
-import { AreaMaintenance } from './state/area-maintenance.model';
+import {
+  AreaMaintenance,
+  createAreaMaintenance,
+} from './state/area-maintenance.model';
 import { AreaMaintenanceQuery } from './state/area-maintenance.query';
 import { AreaMaintenanceService } from './state/area-maintenance.service';
 
 @Component({
   selector: 'trinity-area-maintenance',
-  template: ` <button (click)="sequence()">x10</button>
+  template: ` <div id="area-buttons"></div>
     <trinity-area-table
       #tableComponent
       [areas]="areas$ | async"
       (rowSelect)="onRowSelect($event)"
       style="
         width:100%;
-        height: 500px;
+        height: 400px;
         display: block;"
     ></trinity-area-table>
     <trinity-area-detail
       [area]="activeArea"
       (save)="onSaveForm($event)"
-      (new)="onNew()"
       (delete)="onDelete()"
     ></trinity-area-detail>`,
   styles: [],
@@ -39,6 +41,8 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
 
   @ViewChild('tableComponent') tableComponent: AreaTableComponent | undefined;
 
+  private ui: webix.ui.toolbar | undefined;
+
   constructor(
     private service: AreaMaintenanceService,
     private query: AreaMaintenanceQuery
@@ -48,6 +52,35 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
     this.getSub = this.service
       .get({ mapResponseFn: (res: any) => res.areas })
       .subscribe();
+
+    webix.ready(() => {
+      this.ui = webix.ui({
+        view: 'toolbar',
+        container: 'area-buttons',
+        elements: [
+          {
+            view: 'button',
+            label: 'X10',
+            width: '100',
+            on: {
+              onItemClick: () => {
+                this.sequence();
+              },
+            },
+          },
+          {
+            view: 'button',
+            label: 'New',
+            width: '100',
+            on: {
+              onItemClick: () => {
+                this.onNew();
+              },
+            },
+          },
+        ],
+      }) as webix.ui.form;
+    });
   }
 
   onRowSelect(area: AreaMaintenance) {
@@ -79,10 +112,21 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
   onNew() {
     this.service.setActive(null);
     this.isAdding = true;
+    this.activeArea = createAreaMaintenance({
+      code: null,
+      name: '',
+      geoSequence: null,
+    });
   }
 
   onDelete() {
-    this.deleteSub = this.service.delete(this.query.getActiveId()).subscribe();
+    this.deleteSub = this.service
+      .delete(this.query.getActiveId())
+      .subscribe(() => {
+        const form = webix.$$('area-details') as webix.ui.form;
+        form.clear();
+        this.isAdding = true;
+      });
   }
 
   sequence() {
@@ -98,5 +142,7 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
     this.addSub?.unsubscribe();
     this.deleteSub?.unsubscribe();
     this.sequenceSub?.unsubscribe();
+
+    this.ui?.destructor();
   }
 }

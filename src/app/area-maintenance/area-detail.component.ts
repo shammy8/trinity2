@@ -13,18 +13,16 @@ import { AreaMaintenance } from './state/area-maintenance.model';
 
 @Component({
   selector: 'trinity-area-detail',
-  template: `
-    <div id="form-header-buttons" class="form-header-buttons"></div>
-  `,
+  template: `<div id="form-header-buttons"></div>`,
   styles: [],
 })
 export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
   @Input() area: AreaMaintenance | null = null;
   @Output() save = new EventEmitter<AreaMaintenance>();
-  @Output() new = new EventEmitter<AreaMaintenance>();
   @Output() delete = new EventEmitter<number>();
 
   private ui: webix.ui.form | undefined;
+  private toolbar: webix.ui.toolbar | undefined;
 
   constructor(private root: ElementRef) {}
 
@@ -34,24 +32,11 @@ export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     webix.ready(() => {
-      webix.ui({
+      this.toolbar = webix.ui({
         view: 'toolbar',
         container: 'form-header-buttons',
-        css: 'form-header-content',
         elements: [
           { view: 'button', label: 'Discard', width: '100' },
-          {
-            view: 'button',
-            label: 'New',
-            width: '100',
-            on: {
-              onItemClick: () => {
-                this.new.emit();
-                const form = webix.$$('details') as webix.ui.form;
-                form.clear();
-              },
-            },
-          },
           {
             view: 'button',
             label: 'Delete',
@@ -68,16 +53,16 @@ export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
             width: '100',
             on: {
               onItemClick: () => {
-                const form = webix.$$('details') as webix.ui.form;
+                const form = webix.$$('area-details') as webix.ui.form;
                 this.save.emit(form.getValues());
               },
             },
           },
         ],
-      });
+      }) as webix.ui.toolbar;
 
       this.ui = webix.ui({
-        id: 'details',
+        id: 'area-details',
         container: this.root.nativeElement,
         width: 300,
         view: 'form',
@@ -97,5 +82,6 @@ export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
     this.ui?.destructor();
+    this.toolbar?.destructor();
   }
 }

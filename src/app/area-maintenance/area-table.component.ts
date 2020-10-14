@@ -51,6 +51,7 @@ export class AreaTableComponent implements OnInit, OnDestroy, OnChanges {
       columns: this.columnConfig,
       data: [],
       select: 'row',
+      dragColumn: true,
       on: {
         onAfterSelect: (id: number) =>
           this.rowSelect.emit(this.ui?.getItem(id)),
