@@ -9,7 +9,9 @@ import {
 
 export interface AreaMaintenanceState
   extends EntityState<AreaMaintenance, string>,
-    ActiveState {}
+    ActiveState {
+  scrollPosition: { x: number; y: number };
+}
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({
@@ -18,6 +20,6 @@ export interface AreaMaintenanceState
 })
 export class AreaMaintenanceStore extends EntityStore<AreaMaintenanceState> {
   constructor() {
-    super();
+    super({ scrollPosition: { x: 0, y: 0 } });
   }
 }

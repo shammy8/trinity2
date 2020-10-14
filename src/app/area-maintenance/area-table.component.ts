@@ -7,7 +7,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import { AreaMaintenance } from './state/area-maintenance.model';
 
 @Component({
@@ -20,7 +20,10 @@ export class AreaTableComponent implements OnInit, OnDestroy {
   areas: AreaMaintenance[] | null = null;
   areasSub: Subscription | undefined;
 
+  @Input() scrollState$: Observable<any>;
+
   @Output() rowSelect = new EventEmitter<AreaMaintenance>();
+  @Output() scrollState = new EventEmitter<any>();
 
   private ui: webix.ui.datatable | undefined;
   private columnConfig = [
@@ -51,12 +54,17 @@ export class AreaTableComponent implements OnInit, OnDestroy {
       },
     }) as webix.ui.datatable;
 
-    this.areasSub = this.areas$?.subscribe((areas) => {
-      this.areas = areas;
-      this.ui?.clearAll();
-      this.ui?.parse(JSON.stringify(this.areas), 'json');
-      this.ui?.refresh();
-    });
+    this.areasSub = combineLatest([this.areas$, this.scrollState$]).subscribe(
+      ([areas, scrollState]) => {
+        if (areas[0]) {
+          this.areas = areas;
+          this.ui?.clearAll();
+          this.ui?.parse(JSON.stringify(this.areas), 'json');
+          this.ui?.refresh();
+          this.ui?.scrollTo(scrollState.x, scrollState.y);
+        }
+      }
+    );
 
     this.ui.resize();
   }
@@ -66,6 +74,7 @@ export class AreaTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.scrollState.emit(this.ui?.getScrollState());
     this.ui?.destructor();
     this.areasSub?.unsubscribe();
   }

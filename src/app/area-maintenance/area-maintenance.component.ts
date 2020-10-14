@@ -16,7 +16,9 @@ import { AreaMaintenanceService } from './state/area-maintenance.service';
     <trinity-area-table
       #tableComponent
       [areas$]="areas$"
+      [scrollState$]="query.scrollState$"
       (rowSelect)="onRowSelect($event)"
+      (scrollState)="service.updateScrollPostition($event)"
       style="
         width:100%;
         height: 400px;
@@ -49,8 +51,8 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
   private ui: webix.ui.toolbar | undefined;
 
   constructor(
-    private service: AreaMaintenanceService,
-    private query: AreaMaintenanceQuery
+    public service: AreaMaintenanceService,
+    public query: AreaMaintenanceQuery
   ) {}
 
   ngOnInit(): void {

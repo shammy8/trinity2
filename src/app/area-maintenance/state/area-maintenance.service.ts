@@ -29,4 +29,8 @@ export class AreaMaintenanceService extends NgEntityService<
         .pipe(tap((res) => this.store.set(res.areas)))
     );
   }
+
+  updateScrollPostition(scrollPosition: any) {
+    this.store.update({ scrollPosition });
+  }
 }
