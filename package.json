@@ -23,7 +23,7 @@
     "@angular/router": "~10.1.5",
     "@datorama/akita": "^4.22.0",
     "@datorama/akita-ng-entity-service": "^1.0.0",
-    "rxjs": "~6.5.5",
+    "rxjs": "^6.6.3",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"
   },
