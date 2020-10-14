@@ -30,7 +30,7 @@ export class AreaMaintenanceService extends NgEntityService<
     );
   }
 
-  updateScrollPostition(scrollPosition: any) {
+  updateScrollPostition(scrollPosition: { x: number; y: number }) {
     this.store.update({ scrollPosition });
   }
 }

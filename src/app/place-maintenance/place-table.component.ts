@@ -8,11 +8,11 @@ import { PlaceMaintenance } from './state/place-maintenance.model';
   styles: [],
 })
 export class PlaceTableComponent implements OnInit, OnDestroy {
-  @Input() places$: Observable<PlaceMaintenance[]> | null = null;
-  places: PlaceMaintenance[] | null = null;
-  placesSub: Subscription | undefined;
+  @Input() places$: Observable<PlaceMaintenance[]>;
+  places: PlaceMaintenance[];
+  placesSub: Subscription;
 
-  private ui: webix.ui.datatable | undefined;
+  private ui: webix.ui.datatable;
   private columnConfig = [
     {
       id: 'code',

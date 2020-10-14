@@ -22,11 +22,11 @@ import { PlaceMaintenanceService } from './state/place-maintenance.service';
 })
 export class PlaceMaintenanceComponent implements OnInit, OnDestroy {
   places$ = this.query.selectAll();
-  getSub: Subscription | undefined;
-  areaCodeFilter: number | null = null;
-  areaFilterSub: Subscription | undefined;
+  getSub: Subscription;
+  areaCodeFilter: number;
+  areaFilterSub: Subscription;
 
-  stateHistory: StateHistoryPlugin | undefined;
+  stateHistory: StateHistoryPlugin;
 
   constructor(
     private service: PlaceMaintenanceService,

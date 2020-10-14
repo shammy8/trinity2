@@ -35,20 +35,20 @@ import { AreaMaintenanceService } from './state/area-maintenance.service';
 })
 export class AreaMaintenanceComponent implements OnInit, OnDestroy {
   areas$ = this.query.selectAll();
-  activeArea: AreaMaintenance | null = null;
+  activeArea: AreaMaintenance;
   isAdding: boolean = true;
   listOfCurrentAreaCodes: (number | null)[] = [];
 
-  getSub: Subscription | undefined;
-  updateSub: Subscription | undefined;
-  addSub: Subscription | undefined;
-  deleteSub: Subscription | undefined;
-  sequenceSub: Subscription | undefined;
-  listOfCurrentAreaCodesSub: Subscription | undefined;
+  getSub: Subscription;
+  updateSub: Subscription;
+  addSub: Subscription;
+  deleteSub: Subscription;
+  sequenceSub: Subscription;
+  listOfCurrentAreaCodesSub: Subscription;
 
-  @ViewChild('tableComponent') tableComponent: AreaTableComponent | undefined;
+  @ViewChild('tableComponent') tableComponent: AreaTableComponent;
 
-  private ui: webix.ui.toolbar | undefined;
+  private ui: webix.ui.toolbar;
 
   constructor(
     public service: AreaMaintenanceService,
@@ -60,7 +60,7 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
     this.getSub = this.query
       .selectHasCache()
       .pipe(
-        filter((hasCache) => !hasCache),
+        filter((hasCache) => !hasCache), // only continue to next step if don't have cache
         switchMap(() =>
           this.service.get({ mapResponseFn: (res: any) => res.areas })
         )
@@ -126,7 +126,7 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
           { areas: [newArea] },
           { method: HttpMethod.POST, mapResponseFn: (res: any) => res.areas[0] }
         )
-        // we use POST to update records but Akita has it strongly typed so it only allows put and patch
+        // we use POST to update records but Akita has it strongly typed so it only allows put and patch, but still works
         .subscribe(() => (this.activeArea = this.query.getActive()));
     } else {
       this.addSub = this.service
@@ -155,6 +155,7 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
         const form = webix.$$('area-details') as webix.ui.form;
         form.clear();
         this.isAdding = true;
+        this.service.setActive(null);
       });
   }
 

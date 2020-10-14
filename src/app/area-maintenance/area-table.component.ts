@@ -16,16 +16,16 @@ import { AreaMaintenance } from './state/area-maintenance.model';
   styles: [],
 })
 export class AreaTableComponent implements OnInit, OnDestroy {
-  @Input() areas$: Observable<AreaMaintenance[]> | null = null;
-  areas: AreaMaintenance[] | null = null;
-  areasSub: Subscription | undefined;
+  @Input() areas$: Observable<AreaMaintenance[]>;
+  areas: AreaMaintenance[];
+  areasSub: Subscription;
 
-  @Input() scrollState$: Observable<any>;
+  @Input() scrollState$: Observable<{ x: number; y: number }>;
 
   @Output() rowSelect = new EventEmitter<AreaMaintenance>();
-  @Output() scrollState = new EventEmitter<any>();
+  @Output() scrollState = new EventEmitter<{ x: number; y: number }>();
 
-  private ui: webix.ui.datatable | undefined;
+  private ui: webix.ui.datatable;
   private columnConfig = [
     {
       id: 'code',

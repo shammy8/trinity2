@@ -17,14 +17,14 @@ import { AreaMaintenance } from './state/area-maintenance.model';
   styles: [],
 })
 export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() area: AreaMaintenance | null = null;
+  @Input() area: AreaMaintenance;
   @Input() isAdding: boolean = true;
-  @Input() listOfCurrentAreaCodes: (number | null)[] = [];
+  @Input() listOfCurrentAreaCodes: number[] = [];
   @Output() save = new EventEmitter<AreaMaintenance>();
   @Output() delete = new EventEmitter<number>();
 
-  private ui: webix.ui.form | undefined;
-  private toolbar: webix.ui.toolbar | undefined;
+  private ui: webix.ui.form;
+  private toolbar: webix.ui.toolbar;
 
   constructor(private root: ElementRef) {}
 
