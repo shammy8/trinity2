@@ -19,7 +19,7 @@ import { AreaMaintenance } from './state/area-maintenance.model';
 export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
   @Input() area: AreaMaintenance;
   @Input() isAdding: boolean = true;
-  @Input() listOfCurrentAreaCodes: number[] = [];
+  @Input() listOfCurrentAreaCodes: (number | null)[] = [];
   @Output() save = new EventEmitter<AreaMaintenance>();
   @Output() delete = new EventEmitter<number>();
 

@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { HttpMethod } from '@datorama/akita-ng-entity-service';
 import { Subscription } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
 import { AreaTableComponent } from './area-table.component';
@@ -124,7 +123,7 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
         .update(
           newArea.code,
           { areas: [newArea] },
-          { method: HttpMethod.POST, mapResponseFn: (res: any) => res.areas[0] }
+          { mapResponseFn: (res: any) => res.areas[0] }
         )
         // we use POST to update records but Akita has it strongly typed so it only allows put and patch, but still works
         .subscribe(() => (this.activeArea = this.query.getActive()));
