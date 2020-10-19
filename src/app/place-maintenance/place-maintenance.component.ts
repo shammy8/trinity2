@@ -52,13 +52,15 @@ export class PlaceMaintenanceComponent implements OnInit, OnDestroy {
   }
 
   undo() {
-    this.stateHistory?.undo();
-    this.stateHistory?.undo();
+    // this.stateHistory?.undo();
+    // this.stateHistory?.undo();
+    this.stateHistory.jump(-2);
   }
 
   redo() {
-    this.stateHistory?.redo();
-    this.stateHistory?.redo();
+    // this.stateHistory?.redo();
+    // this.stateHistory?.redo();
+    this.stateHistory.jump(2);
   }
 
   ngOnDestroy() {
