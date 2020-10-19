@@ -34,7 +34,7 @@ import { AreaMaintenanceService } from './state/area-maintenance.service';
 })
 export class AreaMaintenanceComponent implements OnInit, OnDestroy {
   areas$ = this.query.selectAll();
-  activeArea: AreaMaintenance;
+  activeArea: AreaMaintenance | undefined;
   isAdding: boolean = true;
   listOfCurrentAreaCodes: (number | null)[] = [];
 
