@@ -55,7 +55,16 @@ export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
         view: 'toolbar',
         container: 'form-header-buttons',
         elements: [
-          { view: 'button', label: 'Discard', width: '100' },
+          {
+            view: 'button',
+            label: 'Discard',
+            width: '100',
+            on: {
+              onItemClick: () => {
+                this.ui?.parse(this.area, 'json');
+              },
+            },
+          },
           {
             view: 'button',
             label: 'Delete',
