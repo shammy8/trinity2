@@ -6,7 +6,7 @@ import {
 } from './area-maintenance.store';
 
 @Injectable({ providedIn: 'root' })
-@QueryConfig({ sortBy: 'code', sortByOrder: Order.DESC })
+// @QueryConfig({ sortBy: 'code', sortByOrder: Order.DESC })
 export class AreaMaintenanceQuery extends QueryEntity<AreaMaintenanceState> {
   scrollState$ = this.select((state) => state.scrollPosition);
 

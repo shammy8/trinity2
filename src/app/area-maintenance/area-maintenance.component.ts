@@ -125,7 +125,6 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
           { areas: [newArea] },
           { mapResponseFn: (res: any) => res.areas[0] }
         )
-        // we use POST to update records but Akita has it strongly typed so it only allows put and patch, but still works
         .subscribe(() => (this.activeArea = this.query.getActive()));
     } else {
       this.addSub = this.service
