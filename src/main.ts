@@ -4,8 +4,11 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 import { persistState } from '@datorama/akita';
+import { debounceTime } from 'rxjs/operators';
 
-const storage = persistState({ include: ['areas'] });
+const storage = persistState({
+  preStorageUpdateOperator: () => debounceTime(2000), // update the localstorage 2 seconds after a change have been made, to reduce writes to localstorage
+});
 
 const providers = [{ provide: 'persistStorage', useValue: storage }];
 
