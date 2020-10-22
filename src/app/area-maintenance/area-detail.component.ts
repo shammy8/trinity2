@@ -42,7 +42,7 @@ export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
     if (changes.isAdding?.currentValue === false) {
       form.elements['code'].config.readonly = true;
       form.elements['code'].refresh();
-    } else {
+    } else if (changes.isAdding?.currentValue === true) {
       const form = webix.$$('area-details') as webix.ui.form;
       form.elements['code'].config.readonly = false;
       form.elements['code'].refresh();
@@ -83,7 +83,9 @@ export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
               onItemClick: () => {
                 const form = webix.$$('area-details') as webix.ui.form;
                 console.log(form.validate());
-                this.save.emit(form.getValues());
+                if (form.validate()) {
+                  this.save.emit(form.getValues());
+                }
               },
             },
           },
@@ -100,10 +102,13 @@ export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
         //   this.ui?.validate();
         // },
         rules: {
-          code: (value: number) => {
-            // todo validation not working
-            console.log(!this.listOfCurrentAreaCodes.includes(value));
-            return !this.listOfCurrentAreaCodes.includes(value);
+          code: (value: string) => {
+            if (this.isAdding) {
+              return !this.listOfCurrentAreaCodes.includes(+value);
+            } else {
+              // only need this validation if adding a new area else the code is readonly
+              return true;
+            }
           },
         },
         elements: [
