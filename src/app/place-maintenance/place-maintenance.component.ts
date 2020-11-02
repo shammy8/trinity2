@@ -17,7 +17,8 @@ import { PlaceMaintenanceService } from './state/place-maintenance.service';
         width:100%;
         height: 500px;
         display: block;"
-    ></trinity-place-table>`,
+    ></trinity-place-table>
+    <trinity-place-detail> </trinity-place-detail>`,
   styles: [],
 })
 export class PlaceMaintenanceComponent implements OnInit, OnDestroy {
