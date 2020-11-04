@@ -6,8 +6,15 @@ import { PlaceTableComponent } from './place-table.component';
 import { FormsModule } from '@angular/forms';
 import { PlaceDetailComponent } from './place-detail.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
 
-const routes: Routes = [{ path: ':id', component: PlaceMaintenanceComponent }];
+const routes: Routes = [
+  {
+    path: '',
+    component: PlaceMaintenanceComponent,
+    children: [{ path: ':placeCode', component: PlaceDetailComponent }],
+  },
+];
 
 @NgModule({
   declarations: [
@@ -20,6 +27,7 @@ const routes: Routes = [{ path: ':id', component: PlaceMaintenanceComponent }];
     FormsModule,
     RouterModule.forChild(routes),
     MatTabsModule,
+    MatIconModule,
   ],
 })
 export class PlaceMaintenanceModule {}

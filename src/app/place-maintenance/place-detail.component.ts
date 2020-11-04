@@ -1,34 +1,28 @@
-import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { MatTabChangeEvent } from '@angular/material/tabs';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { PlaceMaintenance } from './state/place-maintenance.model';
+import { PlaceMaintenanceQuery } from './state/place-maintenance.query';
 
 @Component({
   selector: 'trinity-place-detail',
   template: `
-    <mat-tab-group
-      [selectedIndex]="selectedIndex"
-      (selectedTabChange)="tabChange($event)"
-    >
-      <mat-tab label="Tab 1"> Content 1 </mat-tab>
-      <mat-tab label="Tab 2"> Content 2 </mat-tab>
-      <mat-tab label="Tab 3"> Content 3 </mat-tab>
-    </mat-tab-group>
+    <pre>{{place | json}} <pre>
   `,
   styles: [],
 })
 export class PlaceDetailComponent implements OnInit {
-  selectedIndex: string | null = '0';
+  place: PlaceMaintenance | undefined;
 
-  constructor(private route: ActivatedRoute, private location: Location) {}
+  constructor(
+    private route: ActivatedRoute,
+    private query: PlaceMaintenanceQuery
+  ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(
-      (data) => (this.selectedIndex = data.get('id'))
-    );
-  }
-
-  tabChange(event: MatTabChangeEvent) {
-    this.location.go(`place-maintenance/${event.index}`);
+    this.route.paramMap.subscribe((data) => {
+      if (data.get('placeCode')) {
+        this.place = this.query.getEntity(data.get('placeCode')!);
+      }
+    });
   }
 }

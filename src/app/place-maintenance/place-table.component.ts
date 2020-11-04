@@ -1,4 +1,12 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { PlaceMaintenance } from './state/place-maintenance.model';
 
@@ -11,6 +19,8 @@ export class PlaceTableComponent implements OnInit, OnDestroy {
   @Input() places$: Observable<PlaceMaintenance[]>;
   places: PlaceMaintenance[];
   placesSub: Subscription;
+
+  @Output() rowSelect = new EventEmitter<PlaceMaintenance>();
 
   private ui: webix.ui.datatable;
   private columnConfig = [
@@ -33,10 +43,10 @@ export class PlaceTableComponent implements OnInit, OnDestroy {
       columns: this.columnConfig,
       data: [],
       select: 'row',
-      // on: {
-      //   onAfterSelect: (id: number) =>
-      //     this.rowSelect.emit(this.ui?.getItem(id)),
-      // },
+      on: {
+        onAfterSelect: (id: number) =>
+          this.rowSelect.emit(this.ui?.getItem(id)),
+      },
     }) as webix.ui.datatable;
 
     this.placesSub = this.places$?.subscribe((places) => {

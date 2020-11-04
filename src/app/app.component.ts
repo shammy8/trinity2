@@ -26,7 +26,7 @@ import { NotificationService } from './notification.service';
 export class AppComponent implements OnInit {
   links = [
     { path: 'area-maintenance', label: 'Area' },
-    { path: 'place-maintenance/0', label: 'Place' },
+    { path: 'place-maintenance', label: 'Place' },
   ];
 
   constructor(
