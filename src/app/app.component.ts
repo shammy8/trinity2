@@ -18,7 +18,6 @@ import { NotificationService } from './notification.service';
         {{ link.label }}
       </a>
     </nav>
-    <br />
     <router-outlet></router-outlet>
   `,
   styles: [],

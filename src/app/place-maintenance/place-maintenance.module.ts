@@ -12,7 +12,11 @@ const routes: Routes = [
   {
     path: '',
     component: PlaceMaintenanceComponent,
-    children: [{ path: ':placeCode', component: PlaceDetailComponent }],
+    children: [
+      { path: '', redirectTo: 'table' },
+      { path: 'table', component: PlaceTableComponent },
+      { path: ':placeCode', component: PlaceDetailComponent },
+    ],
   },
 ];
 
