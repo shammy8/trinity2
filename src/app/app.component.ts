@@ -12,7 +12,6 @@ import { NotificationService } from './notification.service';
         [routerLink]="link.path"
         routerLinkActive
         #rla="routerLinkActive"
-        [routerLinkActiveOptions]="{ exact: true }"
         [active]="rla.isActive"
       >
         {{ link.label }}
