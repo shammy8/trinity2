@@ -1,6 +1,5 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { StateHistoryPlugin } from '@datorama/akita';
 import { Subscription } from 'rxjs';
 import { PlaceMaintenance } from './state/place-maintenance.model';
@@ -9,7 +8,11 @@ import { PlaceMaintenanceService } from './state/place-maintenance.service';
 
 @Component({
   selector: 'trinity-place-table',
-  template: ` Area Code<input type="number" [(ngModel)]="areaCodeFilter" />
+  template: ` Area Code<input
+      type="number"
+      min="1"
+      [(ngModel)]="areaCodeFilter"
+    />
     <button (click)="onSearch()">Search</button>
     <button (click)="undo()">Undo</button>
     <button (click)="redo()">Redo</button>
@@ -41,7 +44,6 @@ export class PlaceTableComponent implements OnInit, OnDestroy {
   ];
   constructor(
     private query: PlaceMaintenanceQuery,
-    private router: Router,
     private service: PlaceMaintenanceService
   ) {}
 
@@ -66,7 +68,6 @@ export class PlaceTableComponent implements OnInit, OnDestroy {
 
     this.placesSub = this.places$?.subscribe((places) => {
       this.places = places;
-      console.log(this.places);
       this.ui?.clearAll();
       this.ui?.parse(JSON.stringify(this.places), 'json');
       this.ui?.refresh();
@@ -94,7 +95,7 @@ export class PlaceTableComponent implements OnInit, OnDestroy {
   }
 
   onRowSelect(place: PlaceMaintenance) {
-    this.router.navigate(['place-maintenance', place.code]);
+    this.service.addTab(place.code);
   }
 
   ngOnDestroy() {

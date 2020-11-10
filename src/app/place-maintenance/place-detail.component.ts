@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PlaceMaintenance } from './state/place-maintenance.model';
 import { PlaceMaintenanceQuery } from './state/place-maintenance.query';
 
@@ -15,13 +15,18 @@ export class PlaceDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private query: PlaceMaintenanceQuery
   ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((data) => {
-      if (data.get('placeCode')) {
-        this.place = this.query.getEntity(data.get('placeCode')!);
+      const placeCode = data.get('placeCode') as string;
+      if (placeCode) {
+        this.place = this.query.getEntity(placeCode);
+        if (!this.place) {
+          this.router.navigate(['place-maintenance', 'table']);
+        }
       }
     });
   }

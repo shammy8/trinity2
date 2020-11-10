@@ -8,6 +8,7 @@ import {
 @Injectable({ providedIn: 'root' })
 export class PlaceMaintenanceQuery extends QueryEntity<PlaceMaintenanceState> {
   areaCodeFilter$ = this.select((state) => state.filter.areaCode);
+  tabs$ = this.select((state) => state.tabs);
 
   constructor(protected store: PlaceMaintenanceStore) {
     super(store);

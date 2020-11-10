@@ -1,13 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PlaceMaintenance } from './state/place-maintenance.model';
+import { RouterQuery } from '@datorama/akita-ng-router-store';
+import { Observable } from 'rxjs';
+import { PlaceMaintenanceQuery } from './state/place-maintenance.query';
+import { PlaceMaintenanceService } from './state/place-maintenance.service';
 
 @Component({
   selector: 'trinity-place-maintenance',
   template: ` <nav mat-tab-nav-bar animationDuration="2000ms">
       <a
         mat-tab-link
-        *ngFor="let link of links"
+        *ngFor="let link of links | async"
         [routerLink]="link"
         [active]="activeLink === link"
         (click)="activeLink = link"
@@ -24,46 +26,30 @@ import { PlaceMaintenance } from './state/place-maintenance.model';
 })
 export class PlaceMaintenanceComponent implements OnInit, OnDestroy {
   activeLink: string | null = null;
-  links: string[] = ['table'];
+  links: Observable<string[]> = this.query.tabs$;
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private routerQuery: RouterQuery,
+    private service: PlaceMaintenanceService,
+    private query: PlaceMaintenanceQuery
+  ) {}
 
   ngOnInit(): void {
-    console.log(this.route.firstChild?.snapshot.params);
-    this.activeLink = 'table';
-    // if (this.route.firstChild?.snapshot.params) {
-    //   const placeCode = this.route.firstChild?.snapshot.params.placeCode;
-    //   this.links.push(placeCode);
-    //   this.activeLink = placeCode;
-    // }
-  }
-
-  onRowSelect(place: PlaceMaintenance) {
-    if (!this.links.includes(place.code)) {
-      this.links.push(place.code);
-    }
-    this.activeLink = place.code;
-    this.router.navigate(['place-maintenance', place.code]);
+    this.service.addTab('table'); // need this or the persistState doesn't show the table tabs for some reason
+    this.routerQuery.selectParams('placeCode').subscribe((page) => {
+      if (!page) {
+        this.activeLink = 'table';
+      } else {
+        this.activeLink = page as string;
+      }
+    });
   }
 
   removeTab(click: MouseEvent, link: string) {
     click.preventDefault();
     click.stopPropagation();
 
-    this.links = this.links.filter((li) => link !== li);
-
-    if (this.activeLink === link) {
-      if (this.links.length > 0) {
-        this.router.navigate([
-          'place-maintenance',
-          this.links[this.links.length - 1],
-        ]);
-        this.activeLink = this.links[this.links.length - 1];
-      } else {
-        this.router.navigate(['place-maintenance']);
-        this.activeLink = null;
-      }
-    }
+    this.service.removeTab(link);
   }
 
   ngOnDestroy() {
