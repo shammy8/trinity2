@@ -5,6 +5,12 @@ import { NotificationService } from './notification.service';
 @Component({
   selector: 'trinity-root',
   template: `
+    <mat-toolbar>
+      <span>A Better Trinity</span>
+      <span style="flex: 1 1 auto"></span>
+      <button mat-button color="primary">Area</button>
+      <button mat-button color="primary">Place</button>
+    </mat-toolbar>
     <nav mat-tab-nav-bar backgroundColor="primary" animationDuration="2000ms">
       <a
         mat-tab-link

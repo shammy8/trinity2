@@ -14,6 +14,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AddWithCredentialsInterceptor } from './add-with-credentials.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,6 +27,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     HttpClientModule,
     BrowserAnimationsModule,
     MatTabsModule,
+    MatToolbarModule,
+    MatButtonModule,
   ],
   providers: [
     {
