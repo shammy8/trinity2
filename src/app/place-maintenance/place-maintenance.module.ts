@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { PlaceDetailComponent } from './place-detail.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 const routes: Routes = [
   {
@@ -32,6 +33,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     MatTabsModule,
     MatIconModule,
+    MatButtonModule,
   ],
 })
 export class PlaceMaintenanceModule {}

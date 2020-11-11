@@ -14,8 +14,12 @@ import { PlaceMaintenanceService } from './state/place-maintenance.service';
         [active]="activeLink === link"
         (click)="activeLink = link"
       >
-        {{ link }}
-        <button *ngIf="link !== 'table'" (click)="removeTab($event, link)">
+        {{ link | titlecase }}
+        <button
+          mat-icon-button
+          *ngIf="link !== 'table'"
+          (click)="removeTab($event, link)"
+        >
           <mat-icon>clear</mat-icon>
         </button>
       </a>
