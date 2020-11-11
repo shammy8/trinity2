@@ -16,9 +16,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { RoutedTabComponent } from './routed-tab/routed-tab.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, RoutedTabComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -29,6 +31,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatTabsModule,
     MatToolbarModule,
     MatButtonModule,
+    MatIconModule,
   ],
   providers: [
     {

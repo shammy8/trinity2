@@ -23,6 +23,7 @@ import { NotificationService } from './notification.service';
         {{ link.label }}
       </a>
     </nav>
+    <trinity-routed-tab [tabs]="links"></trinity-routed-tab>
     <router-outlet></router-outlet>
   `,
   styles: [],
