@@ -1,6 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { NotificationService } from './notification.service';
+import { RoutedTabQuery } from './routed-tab/state/routed-tab.query';
+import { TabInfo } from './routed-tab/state/routed-tab.store';
 
 @Component({
   selector: 'trinity-root',
@@ -14,7 +17,7 @@ import { NotificationService } from './notification.service';
     <nav mat-tab-nav-bar backgroundColor="primary" animationDuration="2000ms">
       <a
         mat-tab-link
-        *ngFor="let link of links"
+        *ngFor="let link of links | async"
         [routerLink]="link.path"
         routerLinkActive
         #rla="routerLinkActive"
@@ -23,20 +26,21 @@ import { NotificationService } from './notification.service';
         {{ link.label }}
       </a>
     </nav>
-    <trinity-routed-tab [tabs]="links"></trinity-routed-tab>
+    <trinity-routed-tab
+      [tabs]="links | async"
+      tabName="primaryTabs"
+    ></trinity-routed-tab>
     <router-outlet></router-outlet>
   `,
   styles: [],
 })
 export class AppComponent implements OnInit {
-  links = [
-    { path: 'area-maintenance', label: 'Area' },
-    { path: 'place-maintenance', label: 'Place' },
-  ];
+  links: Observable<TabInfo[]> = this.routedTabQuery.primaryTabs$;
 
   constructor(
     private http: HttpClient,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private routedTabQuery: RoutedTabQuery
   ) {}
 
   ngOnInit() {
@@ -50,7 +54,7 @@ export class AppComponent implements OnInit {
     this.notificationService.listen();
   }
 
-  addNewTab() {
-    this.links.push({ path: 'place-maintenance', label: 'Place' });
-  }
+  // addNewTab() {
+  //   this.links.push({ path: 'place-maintenance', label: 'Place' });
+  // }
 }
