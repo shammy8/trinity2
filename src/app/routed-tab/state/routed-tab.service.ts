@@ -1,9 +1,15 @@
+import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RoutedTabStore, TabInfo } from './routed-tab.store';
 
 @Injectable({ providedIn: 'root' })
 export class RoutedTabService {
-  constructor(private routedTabStore: RoutedTabStore) {}
+  constructor(
+    private routedTabStore: RoutedTabStore,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   /**
    *
@@ -36,6 +42,21 @@ export class RoutedTabService {
       const newTabArray = state[tabName].filter(
         (tab) => tabInfo.path !== tab.path
       );
+
+      const onTabBeingRemoved = this.route.snapshot.firstChild?.url.some(
+        (ele) => ele.path === tabInfo.path
+      );
+
+      if (onTabBeingRemoved) {
+        // only navigate if on the tab being removed
+        if (newTabArray.length === 0) {
+          // if user removed all tabs, navigate back to home
+          this.router.navigate(['/']);
+        } else {
+          // else just navigate to the tab in the first position of the array, TODO change this logic?
+          this.router.navigate(['/', state[tabName][0].path]);
+        }
+      }
       return { ...state, [tabName]: newTabArray };
     });
   }
