@@ -10,14 +10,14 @@ import { TabInfo } from './state/routed-tab.store';
     <nav
       mat-tab-nav-bar
       cdkDropList
-      (cdkDropListDropped)="drop($event, t)"
+      (cdkDropListDropped)="drop($event)"
       cdkDropListOrientation="horizontal"
       [backgroundColor]="backgroundColor"
     >
       <a
         mat-tab-link
         cdkDrag
-        *ngFor="let tab of copyOfTabs"
+        *ngFor="let tab of tabs"
         [routerLink]="tab.path"
         routerLinkActive
         #rla="routerLinkActive"
@@ -58,10 +58,6 @@ import { TabInfo } from './state/routed-tab.store';
         overflow: hidden;
       }
 
-      a {
-        cursor: move;
-      }
-
       a:last-child {
         border: none;
       }
@@ -69,19 +65,23 @@ import { TabInfo } from './state/routed-tab.store';
   ],
 })
 export class RoutedTabComponent implements OnInit {
-  @Input() tabs: TabInfo[] | null; // required
+  private _tabs: TabInfo[];
+  @Input() // required
+  set tabs(datatabs: TabInfo[] | null) {
+    if (datatabs) {
+      this._tabs = [...datatabs];
+    }
+  }
+  get tabs() {
+    return this._tabs;
+  }
+
   @Input() backgroundColor: ThemePalette;
   @Input() tabName: string; // required
 
-  copyOfTabs: TabInfo[];
-
   constructor(private service: RoutedTabService) {}
 
-  ngOnInit(): void {
-    if (this.tabs) {
-      this.copyOfTabs = [...this.tabs];
-    }
-  }
+  ngOnInit(): void {}
 
   removeTab(click: MouseEvent, tabInfo: TabInfo) {
     click.preventDefault();
@@ -95,7 +95,7 @@ export class RoutedTabComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<TabInfo[]>) {
-    moveItemInArray(this.copyOfTabs, event.previousIndex, event.currentIndex);
-    this.service.changeOrder(this.tabName, this.copyOfTabs);
+    moveItemInArray(this.tabs!, event.previousIndex, event.currentIndex);
+    this.service.changeOrder(this.tabName, this.tabs!);
   }
 }
