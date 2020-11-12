@@ -10,8 +10,18 @@ export class RoutedTabService {
     private router: Router
   ) {}
 
+  /**
+   * @description Add a new tab array only if it doesn't exist
+   * @param tabName Name of the new tab array to add to the routedTab store
+   */
   addTabArray(tabName: string) {
-    this.routedTabStore.update((state) => ({ ...state, [tabName]: [] }));
+    this.routedTabStore.update((state) => {
+      if (!state.hasOwnProperty(tabName)) {
+        return { ...state, [tabName]: [] };
+      } else {
+        return state;
+      }
+    });
   }
 
   /**
