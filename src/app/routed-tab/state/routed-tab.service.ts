@@ -1,14 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { RoutedTabStore, TabInfo } from './routed-tab.store';
 
 @Injectable({ providedIn: 'root' })
 export class RoutedTabService {
-  constructor(
-    private routedTabStore: RoutedTabStore,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+  constructor(private routedTabStore: RoutedTabStore, private router: Router) {}
 
   /**
    * @description Add a new tab array only if it doesn't exist
@@ -56,9 +52,9 @@ export class RoutedTabService {
         (tab) => tabInfo.path !== tab.path
       );
 
-      const onTabBeingRemoved = this.route.snapshot.firstChild?.url.some(
-        (ele) => ele.path === tabInfo.path
-      );
+      const onTabBeingRemoved = this.router.url
+        .split('/')
+        .includes(tabInfo.path);
 
       if (onTabBeingRemoved) {
         // only navigate if on the tab being removed
@@ -67,7 +63,15 @@ export class RoutedTabService {
           this.router.navigate(['/']);
         } else {
           // else just navigate to the tab in the first position of the array, TODO change this logic?
-          this.router.navigate(['/', state[tabName][0].path]);
+          if (tabName === 'primaryTabs') {
+            this.router.navigate(['/', state[tabName][0].path]);
+          } else {
+            this.router.navigate([
+              '/',
+              this.router.url.split('/')[1],
+              state[tabName][0].path,
+            ]);
+          }
         }
       }
       return { ...state, [tabName]: newTabArray };
