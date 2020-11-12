@@ -90,4 +90,10 @@ export class RoutedTabService {
       return { ...state, [tabName]: newTabArray };
     });
   }
+
+  changeOrder(tabName: string, tabs: TabInfo[]) {
+    this.routedTabStore.update((state) => {
+      return { ...state, [tabName]: tabs };
+    });
+  }
 }

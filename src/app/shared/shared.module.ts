@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +15,7 @@ import { RoutedTabComponent } from '../routed-tab/routed-tab.component';
   imports: [
     CommonModule,
     RouterModule,
+    DragDropModule,
     MatTabsModule,
     MatToolbarModule,
     MatButtonModule,
