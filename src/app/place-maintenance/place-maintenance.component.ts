@@ -26,7 +26,7 @@ export class PlaceMaintenanceComponent implements OnInit, OnDestroy {
     this.routedTabService.addTabArray('placeTabs');
 
     this.routedTabService.addTab(
-      { path: 'table', label: 'Table' },
+      { path: 'table', label: 'Table', unRemovable: true },
       'placeTabs'
     );
   }

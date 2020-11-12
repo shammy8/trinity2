@@ -27,4 +27,5 @@ export interface TabInfo {
   path: string;
   label: string;
   tabName?: string;
+  unRemovable?: boolean;
 }

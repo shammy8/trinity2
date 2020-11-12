@@ -15,7 +15,11 @@ import { TabInfo } from './state/routed-tab.store';
         #rla="routerLinkActive"
         [active]="rla.isActive"
         >{{ tab.label }}
-        <button mat-icon-button (click)="removeTab($event, tab)">
+        <button
+          mat-icon-button
+          *ngIf="!tab.unRemovable"
+          (click)="removeTab($event, tab)"
+        >
           <mat-icon>clear</mat-icon>
         </button></a
       >
