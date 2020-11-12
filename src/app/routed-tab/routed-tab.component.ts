@@ -24,9 +24,9 @@ import { TabInfo } from './state/routed-tab.store';
   styles: [],
 })
 export class RoutedTabComponent implements OnInit {
-  @Input() tabs: TabInfo[] | null;
+  @Input() tabs: TabInfo[] | null; // required
   @Input() backgroundColor: ThemePalette;
-  @Input() tabName: string;
+  @Input() tabName: string; // required
 
   constructor(private service: RoutedTabService) {}
 

@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutedTabStore, TabInfo } from './routed-tab.store';
@@ -10,6 +9,10 @@ export class RoutedTabService {
     private route: ActivatedRoute,
     private router: Router
   ) {}
+
+  addTabArray(tabName: string) {
+    this.routedTabStore.update((state) => ({ ...state, [tabName]: [] }));
+  }
 
   /**
    *

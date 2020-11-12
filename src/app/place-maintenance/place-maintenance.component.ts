@@ -1,59 +1,34 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RouterQuery } from '@datorama/akita-ng-router-store';
 import { Observable } from 'rxjs';
-import { PlaceMaintenanceQuery } from './state/place-maintenance.query';
-import { PlaceMaintenanceService } from './state/place-maintenance.service';
+import { RoutedTabQuery } from '../routed-tab/state/routed-tab.query';
+import { RoutedTabService } from '../routed-tab/state/routed-tab.service';
+import { TabInfo } from '../routed-tab/state/routed-tab.store';
 
 @Component({
   selector: 'trinity-place-maintenance',
-  template: ` <nav mat-tab-nav-bar animationDuration="2000ms">
-      <a
-        mat-tab-link
-        *ngFor="let link of links | async"
-        [routerLink]="link"
-        [active]="activeLink === link"
-        (click)="activeLink = link"
-      >
-        {{ link | titlecase }}
-        <button
-          mat-icon-button
-          *ngIf="link !== 'table'"
-          (click)="removeTab($event, link)"
-        >
-          <mat-icon>clear</mat-icon>
-        </button>
-      </a>
-    </nav>
+  template: ` <trinity-routed-tab
+      [tabs]="links | async"
+      tabName="placeTabs"
+    ></trinity-routed-tab>
     <br />
     <router-outlet></router-outlet>`,
   styles: [],
 })
 export class PlaceMaintenanceComponent implements OnInit, OnDestroy {
-  activeLink: string | null = null;
-  links: Observable<string[]> = this.query.tabs$;
+  links: Observable<TabInfo[]> = this.routedTabQuery.placeTabs$;
 
   constructor(
-    private routerQuery: RouterQuery,
-    private service: PlaceMaintenanceService,
-    private query: PlaceMaintenanceQuery
+    private routedTabQuery: RoutedTabQuery,
+    private routedTabService: RoutedTabService
   ) {}
 
   ngOnInit(): void {
-    this.service.addTab('table'); // need this or the persistState doesn't show the table tabs for some reason
-    this.routerQuery.selectParams('placeCode').subscribe((page) => {
-      if (!page) {
-        this.activeLink = 'table';
-      } else {
-        this.activeLink = page as string;
-      }
-    });
-  }
+    this.routedTabService.addTabArray('placeTabs');
 
-  removeTab(click: MouseEvent, link: string) {
-    click.preventDefault();
-    click.stopPropagation();
-
-    this.service.removeTab(link);
+    this.routedTabService.addTab(
+      { path: 'table', label: 'Table' },
+      'placeTabs'
+    );
   }
 
   ngOnDestroy() {
