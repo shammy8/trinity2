@@ -21,6 +21,19 @@ export class RoutedTabService {
   }
 
   /**
+   * @description Remove a tab array
+   * @param tabName Name of the tab array to remove from the routedTab store
+   */
+  removeTabArray(tabName: string) {
+    if (tabName === 'primaryTabs') {
+      return;
+    }
+    this.routedTabStore.update((state) => {
+      return { ...state, [tabName]: [] };
+    });
+  }
+
+  /**
    *
    * @param tabInfo info of the tab to be added to the tabName
    * @param tabName name of the tab array to add to

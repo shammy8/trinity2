@@ -22,7 +22,13 @@ import { TabInfo } from './routed-tab/state/routed-tab.store';
       <button
         mat-button
         color="primary"
-        (click)="addToTab({ path: 'place-maintenance', label: 'Place' })"
+        (click)="
+          addToTab({
+            path: 'place-maintenance',
+            label: 'Place',
+            tabName: 'placeTabs'
+          })
+        "
       >
         Place
       </button>

@@ -37,5 +37,9 @@ export class RoutedTabComponent implements OnInit {
     click.stopPropagation();
 
     this.service.removeTab(tabInfo, this.tabName);
+
+    if (this.tabName === 'primaryTabs' && tabInfo.tabName) {
+      this.service.removeTabArray(tabInfo.tabName);
+    }
   }
 }

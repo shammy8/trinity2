@@ -10,7 +10,7 @@ export function createInitialState(): RoutedTabState {
   return {
     primaryTabs: [
       { path: 'area-maintenance', label: 'Area' },
-      { path: 'place-maintenance', label: 'Place' },
+      { path: 'place-maintenance', label: 'Place', tabName: 'placeTabs' },
     ],
   };
 }
@@ -26,4 +26,5 @@ export class RoutedTabStore extends Store<RoutedTabState> {
 export interface TabInfo {
   path: string;
   label: string;
+  tabName?: string;
 }
