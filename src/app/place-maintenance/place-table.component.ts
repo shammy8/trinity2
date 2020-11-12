@@ -2,6 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { StateHistoryPlugin } from '@datorama/akita';
 import { Subscription } from 'rxjs';
+import { RoutedTabService } from '../routed-tab/state/routed-tab.service';
 import { PlaceMaintenance } from './state/place-maintenance.model';
 import { PlaceMaintenanceQuery } from './state/place-maintenance.query';
 import { PlaceMaintenanceService } from './state/place-maintenance.service';
@@ -44,7 +45,8 @@ export class PlaceTableComponent implements OnInit, OnDestroy {
   ];
   constructor(
     private query: PlaceMaintenanceQuery,
-    private service: PlaceMaintenanceService
+    private service: PlaceMaintenanceService,
+    private routedTabService: RoutedTabService
   ) {}
 
   ngOnInit() {
@@ -95,7 +97,10 @@ export class PlaceTableComponent implements OnInit, OnDestroy {
   }
 
   onRowSelect(place: PlaceMaintenance) {
-    this.service.addTab(place.code);
+    this.routedTabService.addTab(
+      { path: place.code, label: place.code },
+      'placeTabs'
+    );
   }
 
   ngOnDestroy() {
