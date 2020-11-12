@@ -61,6 +61,10 @@ import { TabInfo } from './state/routed-tab.store';
       a:last-child {
         border: none;
       }
+
+      mat-icon {
+        font-size: 18px;
+      }
     `,
   ],
 })

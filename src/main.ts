@@ -7,6 +7,7 @@ import { persistState } from '@datorama/akita';
 import { debounceTime } from 'rxjs/operators';
 
 const storage = persistState({
+  include: ['routed-tab'],
   preStorageUpdateOperator: () => debounceTime(2000), // update the localstorage 2 seconds after a change have been made, to reduce writes to localstorage
 });
 
