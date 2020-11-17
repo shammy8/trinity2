@@ -1,4 +1,5 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Platform } from '@angular/cdk/platform';
 import {
   Component,
   ContentChild,
@@ -65,11 +66,11 @@ export class RoutedTabComponent implements OnInit {
   @Input() backgroundColor: ThemePalette;
   @Input() color: ThemePalette;
   @Input() tabName: string; // required
-  @Input() draggingDisabled: boolean = true;
+  @Input() draggingDisabled: boolean = this.platform.BLINK ? false : true; // if browser is chrome (or runs Blink rendering engine) enable dragging else disable
 
   @ContentChild('label') labelRef: TemplateRef<any>;
 
-  constructor(private service: RoutedTabService) {}
+  constructor(private service: RoutedTabService, public platform: Platform) {}
 
   ngOnInit(): void {}
 
