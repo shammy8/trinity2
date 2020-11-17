@@ -1,6 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Platform } from '@angular/cdk/platform';
 import {
+  ChangeDetectionStrategy,
   Component,
   ContentChild,
   Input,
@@ -13,6 +14,8 @@ import { TabInfo } from './state/routed-tab.store';
 
 @Component({
   selector: 'trinity-routed-tab',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['routed-tab.component.scss'],
   template: `
     <nav
       mat-tab-nav-bar
@@ -49,7 +52,6 @@ import { TabInfo } from './state/routed-tab.store';
       </a>
     </nav>
   `,
-  styleUrls: ['routed-tab.component.scss'],
 })
 export class RoutedTabComponent implements OnInit {
   private _tabs: TabInfo[];

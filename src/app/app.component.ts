@@ -40,14 +40,12 @@ import { TabInfo } from './routed-tab/state/routed-tab.store';
       tabName="primaryTabs"
     >
       <ng-template #label let-tab let-i="index" let-isActive="isActive">
-        <p>
-          <span
-            matBadge="{{ i }}"
-            matBadgeColor="accent"
-            matBadgeOverlap="false"
-            >{{ tab.path }}</span
-          >
-        </p>
+        <span
+          matBadge="{{ i }}"
+          matBadgeColor="accent"
+          matBadgeOverlap="false"
+          >{{ tab.path }}</span
+        >
       </ng-template>
     </trinity-routed-tab>
 
