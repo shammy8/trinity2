@@ -7,6 +7,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { RoutedTabComponent } from '../routed-tab/routed-tab.component';
 
@@ -20,6 +21,7 @@ import { RoutedTabComponent } from '../routed-tab/routed-tab.component';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
+    MatBadgeModule,
   ],
   exports: [
     CommonModule,
@@ -28,6 +30,7 @@ import { RoutedTabComponent } from '../routed-tab/routed-tab.component';
     MatButtonModule,
     MatIconModule,
     RoutedTabComponent,
+    MatBadgeModule,
   ],
 })
 export class SharedModule {}
