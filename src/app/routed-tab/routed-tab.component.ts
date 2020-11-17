@@ -13,6 +13,7 @@ import { TabInfo } from './state/routed-tab.store';
       (cdkDropListDropped)="drop($event)"
       cdkDropListOrientation="horizontal"
       [backgroundColor]="backgroundColor"
+      [color]="color"
     >
       <a
         mat-tab-link
@@ -33,40 +34,7 @@ import { TabInfo } from './state/routed-tab.store';
       >
     </nav>
   `,
-  styles: [
-    `
-      .cdk-drag-preview {
-        box-sizing: border-box;
-        border-radius: 4px;
-        box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-          0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
-      }
-
-      .cdk-drag-placeholder {
-        opacity: 0;
-      }
-
-      .cdk-drag-animating {
-        transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-      }
-
-      nav.cdk-drop-list-dragging a:not(.cdk-drag-placeholder) {
-        transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-      }
-
-      nav {
-        overflow: hidden;
-      }
-
-      a:last-child {
-        border: none;
-      }
-
-      mat-icon {
-        font-size: 18px;
-      }
-    `,
-  ],
+  styleUrls: ['routed-tab.component.scss'],
 })
 export class RoutedTabComponent implements OnInit {
   private _tabs: TabInfo[];
@@ -81,6 +49,7 @@ export class RoutedTabComponent implements OnInit {
   }
 
   @Input() backgroundColor: ThemePalette;
+  @Input() color: ThemePalette;
   @Input() tabName: string; // required
 
   constructor(private service: RoutedTabService) {}
