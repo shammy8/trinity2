@@ -9,6 +9,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
+import { Routes } from '../routes.model';
 import { RoutedTabService } from './state/routed-tab.service';
 import { TabInfo } from './state/routed-tab.store';
 
@@ -67,7 +68,7 @@ export class RoutedTabComponent implements OnInit {
 
   @Input() backgroundColor: ThemePalette;
   @Input() color: ThemePalette;
-  @Input() tabName: string; // required
+  @Input() tabName: Routes; // required
   @Input() draggingDisabled: boolean = this.platform.BLINK ? false : true; // if browser is chrome (or runs Blink rendering engine) enable dragging else disable
 
   @ContentChild('label') labelRef: TemplateRef<any>;
@@ -82,7 +83,7 @@ export class RoutedTabComponent implements OnInit {
 
     this.service.removeTab(tabInfo, this.tabName);
 
-    if (this.tabName === 'primaryTabs' && tabInfo.tabName) {
+    if (this.tabName === Routes.primary && tabInfo.tabName) {
       this.service.removeTabArray(tabInfo.tabName);
     }
   }

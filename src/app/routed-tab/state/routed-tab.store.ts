@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Store, StoreConfig } from '@datorama/akita';
+import { Routes } from 'src/app/routes.model';
 
 export interface RoutedTabState {
-  primaryTabs: TabInfo[];
+  [Routes.primary]: TabInfo[];
   [key: string]: TabInfo[];
 }
 
 export function createInitialState(): RoutedTabState {
   return {
-    primaryTabs: [
+    [Routes.primary]: [
       { path: 'area-maintenance', label: 'Area' },
-      { path: 'place-maintenance', label: 'Place', tabName: 'placeTabs' },
+      { path: 'place-maintenance', label: 'Place', tabName: Routes.place },
     ],
   };
 }
@@ -26,6 +27,6 @@ export class RoutedTabStore extends Store<RoutedTabState> {
 export interface TabInfo {
   path: string;
   label: string;
-  tabName?: string;
+  tabName?: Routes;
   unRemovable?: boolean;
 }

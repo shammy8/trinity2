@@ -5,6 +5,7 @@ import { NotificationService } from './notification.service';
 import { RoutedTabQuery } from './routed-tab/state/routed-tab.query';
 import { RoutedTabService } from './routed-tab/state/routed-tab.service';
 import { TabInfo } from './routed-tab/state/routed-tab.store';
+import { Routes } from './routes.model';
 
 @Component({
   selector: 'trinity-root',
@@ -26,7 +27,7 @@ import { TabInfo } from './routed-tab/state/routed-tab.store';
           addToTab({
             path: 'place-maintenance',
             label: 'Place',
-            tabName: 'placeTabs'
+            tabName: routes.place
           })
         "
       >
@@ -37,7 +38,7 @@ import { TabInfo } from './routed-tab/state/routed-tab.store';
     <trinity-routed-tab
       backgroundColor="primary"
       [tabs]="links | async"
-      tabName="primaryTabs"
+      [tabName]="routes.primary"
     >
       <ng-template #label let-tab let-i="index" let-isActive="isActive">
         <span
@@ -55,6 +56,7 @@ import { TabInfo } from './routed-tab/state/routed-tab.store';
 })
 export class AppComponent implements OnInit {
   links: Observable<TabInfo[]> = this.routedTabQuery.primaryTabs$;
+  routes = Routes;
 
   constructor(
     private http: HttpClient,
@@ -75,6 +77,6 @@ export class AppComponent implements OnInit {
   }
 
   addToTab(tabInfo: TabInfo) {
-    this.routedTabService.addTab(tabInfo, 'primaryTabs', true);
+    this.routedTabService.addTab(tabInfo, Routes.primary, true);
   }
 }

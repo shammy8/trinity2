@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { StateHistoryPlugin } from '@datorama/akita';
 import { Subscription } from 'rxjs';
 import { RoutedTabService } from '../routed-tab/state/routed-tab.service';
+import { Routes } from '../routes.model';
 import { PlaceMaintenance } from './state/place-maintenance.model';
 import { PlaceMaintenanceQuery } from './state/place-maintenance.query';
 import { PlaceMaintenanceService } from './state/place-maintenance.service';
@@ -99,7 +100,7 @@ export class PlaceTableComponent implements OnInit, OnDestroy {
   onRowSelect(place: PlaceMaintenance) {
     this.routedTabService.addTab(
       { path: place.code, label: place.code },
-      'placeTabs'
+      Routes.place
     );
   }
 

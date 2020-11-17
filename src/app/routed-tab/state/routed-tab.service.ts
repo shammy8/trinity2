@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Routes } from 'src/app/routes.model';
 import { RoutedTabStore, TabInfo } from './routed-tab.store';
 
 @Injectable({ providedIn: 'root' })
@@ -10,7 +11,7 @@ export class RoutedTabService {
    * @description Add a new tab array only if it doesn't exist
    * @param tabName Name of the new tab array to add to the routedTab store
    */
-  addTabArray(tabName: string) {
+  addTabArray(tabName: Routes) {
     this.routedTabStore.update((state) => {
       if (!state.hasOwnProperty(tabName)) {
         return { ...state, [tabName]: [] };
@@ -21,11 +22,11 @@ export class RoutedTabService {
   }
 
   /**
-   * @description Remove a tab array
+   * @description Remove a tab array. Used when user closes a primary tab
    * @param tabName Name of the tab array to remove from the routedTab store
    */
-  removeTabArray(tabName: string) {
-    if (tabName === 'primaryTabs') {
+  removeTabArray(tabName: Routes) {
+    if (tabName === Routes.primary) {
       return;
     }
     this.routedTabStore.update((state) => {
@@ -39,7 +40,7 @@ export class RoutedTabService {
    * @param tabName name of the tab array to add to
    * @param navigate whether to navigate to the new tab or not
    */
-  addTab(tabInfo: TabInfo, tabName: string, navigate?: boolean) {
+  addTab(tabInfo: TabInfo, tabName: Routes, navigate?: boolean) {
     this.routedTabStore.update((state) => {
       const hasTab: boolean = state[tabName].some(
         (element) => element.path === tabInfo.path
@@ -57,7 +58,7 @@ export class RoutedTabService {
     if (!navigate) {
       return;
     }
-    if (tabName === 'primaryTabs') {
+    if (tabName === Routes.primary) {
       this.router.navigate([tabInfo.path]);
     } else {
       const urlSegment = this.router.url.split('/');
@@ -70,7 +71,7 @@ export class RoutedTabService {
    * @param tabInfo info of the tab to be removed from the tabName
    * @param tabName name of the tab array to remove from
    */
-  removeTab(tabInfo: TabInfo, tabName: string) {
+  removeTab(tabInfo: TabInfo, tabName: Routes) {
     this.routedTabStore.update((state) => {
       const newTabArray = state[tabName].filter(
         (tab) => tabInfo.path !== tab.path
@@ -87,7 +88,7 @@ export class RoutedTabService {
           this.router.navigate(['/']);
         } else {
           // else just navigate to the tab in the first position of the array, TODO change this logic?
-          if (tabName === 'primaryTabs') {
+          if (tabName === Routes.primary) {
             this.router.navigate(['/', state[tabName][0].path]);
           } else {
             this.router.navigate([
@@ -102,7 +103,7 @@ export class RoutedTabService {
     });
   }
 
-  changeOrder(tabName: string, tabs: TabInfo[]) {
+  changeOrder(tabName: Routes, tabs: TabInfo[]) {
     this.routedTabStore.update((state) => {
       return { ...state, [tabName]: tabs };
     });

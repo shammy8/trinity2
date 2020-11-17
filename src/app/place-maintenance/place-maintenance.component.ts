@@ -3,12 +3,13 @@ import { Observable } from 'rxjs';
 import { RoutedTabQuery } from '../routed-tab/state/routed-tab.query';
 import { RoutedTabService } from '../routed-tab/state/routed-tab.service';
 import { TabInfo } from '../routed-tab/state/routed-tab.store';
+import { Routes } from '../routes.model';
 
 @Component({
   selector: 'trinity-place-maintenance',
   template: ` <trinity-routed-tab
       [tabs]="links | async"
-      tabName="placeTabs"
+      [tabName]="route.place"
     ></trinity-routed-tab>
     <br />
     <router-outlet></router-outlet>`,
@@ -16,6 +17,7 @@ import { TabInfo } from '../routed-tab/state/routed-tab.store';
 })
 export class PlaceMaintenanceComponent implements OnInit, OnDestroy {
   links: Observable<TabInfo[]> = this.routedTabQuery.placeTabs$;
+  route = Routes;
 
   constructor(
     private routedTabQuery: RoutedTabQuery,
@@ -23,11 +25,11 @@ export class PlaceMaintenanceComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.routedTabService.addTabArray('placeTabs');
+    this.routedTabService.addTabArray(Routes.place);
 
     this.routedTabService.addTab(
       { path: 'table', label: 'Table', unRemovable: true },
-      'placeTabs'
+      Routes.place
     );
   }
 
