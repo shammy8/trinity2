@@ -38,7 +38,11 @@ import { TabInfo } from './routed-tab/state/routed-tab.store';
       backgroundColor="primary"
       [tabs]="links | async"
       tabName="primaryTabs"
-    ></trinity-routed-tab>
+    >
+      <ng-template #label let-tab let-i="index" let-isActive="isActive">
+        <p>{{ tab.path }}</p>
+      </ng-template>
+    </trinity-routed-tab>
 
     <router-outlet></router-outlet>
   `,

@@ -1,5 +1,11 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  Input,
+  OnInit,
+  TemplateRef,
+} from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { RoutedTabService } from './state/routed-tab.service';
 import { TabInfo } from './state/routed-tab.store';
@@ -18,20 +24,27 @@ import { TabInfo } from './state/routed-tab.store';
       <a
         mat-tab-link
         cdkDrag
-        *ngFor="let tab of tabs"
+        *ngFor="let tab of tabs; index as i"
         [routerLink]="tab.path"
         routerLinkActive
         #rla="routerLinkActive"
         [active]="rla.isActive"
-        >{{ tab.label }}
+      >
+        <ng-template #default> {{ tab.label }}</ng-template>
+        <ng-container
+          *ngTemplateOutlet="
+            labelRef || default;
+            context: { $implicit: tab, index: i, isActive: rla.isActive }
+          "
+        ></ng-container>
         <button
           mat-icon-button
           *ngIf="!tab.unRemovable"
           (click)="removeTab($event, tab)"
         >
           <mat-icon>clear</mat-icon>
-        </button></a
-      >
+        </button>
+      </a>
     </nav>
   `,
   styleUrls: ['routed-tab.component.scss'],
@@ -51,6 +64,8 @@ export class RoutedTabComponent implements OnInit {
   @Input() backgroundColor: ThemePalette;
   @Input() color: ThemePalette;
   @Input() tabName: string; // required
+
+  @ContentChild('label') labelRef: TemplateRef<any>;
 
   constructor(private service: RoutedTabService) {}
 
