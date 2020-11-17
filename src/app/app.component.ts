@@ -75,6 +75,6 @@ export class AppComponent implements OnInit {
   }
 
   addToTab(tabInfo: TabInfo) {
-    this.routedTabService.addTab(tabInfo, 'primaryTabs');
+    this.routedTabService.addTab(tabInfo, 'primaryTabs', true);
   }
 }

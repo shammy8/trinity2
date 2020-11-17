@@ -37,8 +37,9 @@ export class RoutedTabService {
    *
    * @param tabInfo info of the tab to be added to the tabName
    * @param tabName name of the tab array to add to
+   * @param navigate whether to navigate to the new tab or not
    */
-  addTab(tabInfo: TabInfo, tabName: string) {
+  addTab(tabInfo: TabInfo, tabName: string, navigate?: boolean) {
     this.routedTabStore.update((state) => {
       const hasTab: boolean = state[tabName].some(
         (element) => element.path === tabInfo.path
@@ -52,6 +53,16 @@ export class RoutedTabService {
         return { ...state, [tabName]: newTabArray };
       }
     });
+
+    if (!navigate) {
+      return;
+    }
+    if (tabName === 'primaryTabs') {
+      this.router.navigate([tabInfo.path]);
+    } else {
+      const urlSegment = this.router.url.split('/');
+      this.router.navigate([urlSegment[1], tabInfo.path]);
+    }
   }
 
   /**
