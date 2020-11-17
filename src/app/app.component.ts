@@ -38,6 +38,7 @@ import { TabInfo } from './routed-tab/state/routed-tab.store';
       backgroundColor="primary"
       [tabs]="links | async"
       tabName="primaryTabs"
+      [draggingDisabled]="false"
     >
       <ng-template #label let-tab let-i="index" let-isActive="isActive">
         <p>

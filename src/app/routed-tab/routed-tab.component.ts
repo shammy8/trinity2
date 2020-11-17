@@ -16,6 +16,7 @@ import { TabInfo } from './state/routed-tab.store';
     <nav
       mat-tab-nav-bar
       cdkDropList
+      [cdkDropListDisabled]="draggingDisabled"
       (cdkDropListDropped)="drop($event)"
       cdkDropListOrientation="horizontal"
       [backgroundColor]="backgroundColor"
@@ -64,6 +65,7 @@ export class RoutedTabComponent implements OnInit {
   @Input() backgroundColor: ThemePalette;
   @Input() color: ThemePalette;
   @Input() tabName: string; // required
+  @Input() draggingDisabled: boolean = true;
 
   @ContentChild('label') labelRef: TemplateRef<any>;
 
