@@ -6,11 +6,12 @@ import {
   EntityStore,
   StoreConfig,
 } from '@datorama/akita';
+import { ScrollState } from 'src/app/shared/models';
 
 export interface AreaMaintenanceState
   extends EntityState<AreaMaintenance, string>,
     ActiveState {
-  scrollPosition: { x: number; y: number };
+  scrollPosition: ScrollState;
 }
 
 @Injectable({ providedIn: 'root' })

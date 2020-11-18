@@ -8,6 +8,7 @@ import {
   Output,
 } from '@angular/core';
 import { combineLatest, Observable, Subscription } from 'rxjs';
+import { ScrollState } from '../shared/models';
 import { AreaMaintenance } from './state/area-maintenance.model';
 
 @Component({
@@ -20,10 +21,10 @@ export class AreaTableComponent implements OnInit, OnDestroy {
   areas: AreaMaintenance[];
   areasSub: Subscription;
 
-  @Input() scrollState$: Observable<{ x: number; y: number }>;
+  @Input() scrollState$: Observable<ScrollState>;
 
   @Output() rowSelect = new EventEmitter<AreaMaintenance>();
-  @Output() scrollState = new EventEmitter<{ x: number; y: number }>();
+  @Output() scrollState = new EventEmitter<ScrollState>();
 
   private ui: webix.ui.datatable;
   private columnConfig = [

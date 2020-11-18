@@ -5,6 +5,7 @@ import {
 } from './area-maintenance.store';
 import { NgEntityService } from '@datorama/akita-ng-entity-service';
 import { tap } from 'rxjs/operators';
+import { ScrollState } from 'src/app/shared/models';
 
 @Injectable({ providedIn: 'root' })
 export class AreaMaintenanceService extends NgEntityService<
@@ -30,7 +31,7 @@ export class AreaMaintenanceService extends NgEntityService<
     );
   }
 
-  updateScrollPostition(scrollPosition: { x: number; y: number }) {
+  updateScrollPostition(scrollPosition: ScrollState) {
     this.store.update({ scrollPosition });
   }
 }
