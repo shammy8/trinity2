@@ -20,7 +20,7 @@ import { PlaceMaintenanceService } from './state/place-maintenance.service';
   styles: [],
 })
 export class PlaceDetailComponent implements OnInit, OnDestroy {
-  place: PlaceMaintenance | undefined;
+  place: PlaceMaintenance;
 
   isAdding: boolean;
   formIsDirty = false;
@@ -200,10 +200,10 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
   }
 
   onDelete() {
-    this.deleteSub = this.service.delete(this.place!.code).subscribe(() => {
+    this.deleteSub = this.service.delete(this.place.code).subscribe(() => {
       this.router.navigate(['place-maintenance']);
       this.routedService.removeTab(
-        { label: this.place!.code, path: this.place!.code },
+        { label: this.place.code, path: this.place.code },
         Routes.place
       );
     });

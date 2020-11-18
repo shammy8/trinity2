@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { Routes } from 'src/app/routes.model';
 import { RoutedTabStore, TabInfo } from './routed-tab.store';
 
+// TODO navigating inside subscribes gives a navigating outside ngzone warning
+// can use this.zone.run(() => this.router.navigate(['']));
 @Injectable({ providedIn: 'root' })
 export class RoutedTabService {
   constructor(private routedTabStore: RoutedTabStore, private router: Router) {}
