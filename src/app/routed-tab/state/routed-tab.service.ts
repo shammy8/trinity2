@@ -67,7 +67,7 @@ export class RoutedTabService {
   }
 
   /**
-   *
+   * TODO probably just need tab.path to be passed in instead of the whole tabinfo
    * @param tabInfo info of the tab to be removed from the tabName
    * @param tabName name of the tab array to remove from
    */
