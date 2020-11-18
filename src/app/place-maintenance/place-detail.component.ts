@@ -37,7 +37,7 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private service: PlaceMaintenanceService,
-    private routedService: RoutedTabService
+    private routedTabService: RoutedTabService
   ) {}
 
   ngOnInit(): void {
@@ -106,6 +106,16 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
                 if (form.validate()) {
                   this.onSave(form.getValues());
                 }
+              },
+            },
+          },
+          {
+            view: 'button',
+            label: 'Go to Address',
+            width: '150',
+            on: {
+              onItemClick: () => {
+                this.onGoToAddress();
               },
             },
           },
@@ -183,11 +193,11 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
           this.formIsDirty = false;
 
           // remove the new tab and add a tab for the newly created place
-          this.routedService.removeTab(
+          this.routedTabService.removeTab(
             { label: 'New', path: 'new' },
             Routes.place
           );
-          this.routedService.addTab(
+          this.routedTabService.addTab(
             {
               label: res.code,
               path: res.code,
@@ -202,11 +212,19 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
   onDelete() {
     this.deleteSub = this.service.delete(this.place.code).subscribe(() => {
       this.router.navigate(['place-maintenance']);
-      this.routedService.removeTab(
+      this.routedTabService.removeTab(
         { label: this.place.code, path: this.place.code },
         Routes.place
       );
     });
+  }
+
+  onGoToAddress() {
+    this.routedTabService.addTab(
+      { label: 'Area', path: 'area-maintenance' },
+      Routes.primary
+    );
+    this.router.navigate(['area-maintenance']);
   }
 
   ngOnDestroy() {

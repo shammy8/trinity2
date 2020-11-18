@@ -16,8 +16,9 @@ import { PlaceMaintenanceService } from './state/place-maintenance.service';
       [(ngModel)]="areaCodeFilter"
     />
     <button (click)="onSearch()">Search</button>
-    <!-- <button (click)="undo()">Undo</button>
-    <button (click)="redo()">Redo</button> -->
+    <button (click)="undo()">Undo</button>
+    <button (click)="redo()">Redo</button>
+    <br />
     <button (click)="onCreate()">Create New Place</button>
     <div id="place-table" style="height: 500px"></div>`,
   styles: [],
