@@ -4,6 +4,7 @@ import {
   PlaceMaintenanceState,
 } from './place-maintenance.store';
 import { NgEntityService } from '@datorama/akita-ng-entity-service';
+import { PlaceMaintenanceWrapper } from './place-maintenance.model';
 
 @Injectable({ providedIn: 'root' })
 export class PlaceMaintenanceService extends NgEntityService<
@@ -14,7 +15,7 @@ export class PlaceMaintenanceService extends NgEntityService<
   }
 
   getSinglePlace(placeCode: string) {
-    return this.getHttp().get<any>(
+    return this.getHttp().get<PlaceMaintenanceWrapper>(
       `${this.getConfig().baseUrl}/${this.resourceName}/${placeCode}`
     );
   }

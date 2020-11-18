@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { RoutedTabService } from '../routed-tab/state/routed-tab.service';
 import { Routes } from '../routes.model';
-import { PlaceMaintenance } from './state/place-maintenance.model';
+import {
+  createPlaceMaintenance,
+  PlaceMaintenance,
+} from './state/place-maintenance.model';
 import { PlaceMaintenanceService } from './state/place-maintenance.service';
 
 @Component({
@@ -28,6 +31,7 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
   deleteSub: Subscription;
   updateSub: Subscription;
   addSub: Subscription;
+  placeSub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,14 +41,23 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap
+    this.placeSub = this.route.paramMap
       .pipe(
-        switchMap((params) =>
-          this.service.getSinglePlace(params.get('placeCode') as string)
-        ),
-        map((res) => res.places)
+        switchMap((params) => {
+          if (params.get('placeCode') === 'new') {
+            // if creating a new place return an observable of an empty place
+            this.isAdding = true;
+            return of(createPlaceMaintenance({}));
+          } else {
+            // else if updating a place call the api to get that api
+            this.isAdding = false;
+            return this.service
+              .getSinglePlace(params.get('placeCode') as string)
+              .pipe(map((res) => res.places[0]));
+          }
+        })
       )
-      .subscribe((place) => {
+      .subscribe((place: PlaceMaintenance) => {
         // when routing to the same component Angular doesn't destory the component
         // and webix must need a unique id for each view so need to destory the previous views
         this.ui?.destructor();
@@ -132,6 +145,14 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
           {
             view: 'text',
             type: 'number',
+            label: 'Area Code',
+            name: 'areaCode',
+            required: true,
+            labelWidth: 100,
+          },
+          {
+            view: 'text',
+            type: 'number',
             label: 'Sequence',
             name: 'geoSequence',
             labelWidth: 100,
@@ -158,7 +179,23 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
           { places: [newPlace] },
           { mapResponseFn: (res: any) => res.places[0] }
         )
-        .subscribe(() => (this.formIsDirty = false));
+        .subscribe((res) => {
+          this.formIsDirty = false;
+
+          // remove the new tab and add a tab for the newly created place
+          this.routedService.removeTab(
+            { label: 'New', path: 'new' },
+            Routes.place
+          );
+          this.routedService.addTab(
+            {
+              label: res.code,
+              path: res.code,
+            },
+            Routes.place,
+            true
+          );
+        });
     }
   }
 
@@ -173,6 +210,7 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.placeSub?.unsubscribe();
     this.updateSub?.unsubscribe();
     this.addSub?.unsubscribe();
     this.deleteSub?.unsubscribe();

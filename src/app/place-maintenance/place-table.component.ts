@@ -18,6 +18,7 @@ import { PlaceMaintenanceService } from './state/place-maintenance.service';
     <button (click)="onSearch()">Search</button>
     <!-- <button (click)="undo()">Undo</button>
     <button (click)="redo()">Redo</button> -->
+    <button (click)="onCreate()">Create New Place</button>
     <div id="place-table" style="height: 500px"></div>`,
   styles: [],
 })
@@ -87,6 +88,14 @@ export class PlaceTableComponent implements OnInit, OnDestroy {
     this.getSub = this.service
       .get({ mapResponseFn: (res: any) => res.places, params })
       .subscribe();
+  }
+
+  onCreate() {
+    this.routedTabService.addTab(
+      { label: 'New', path: 'new' },
+      Routes.place,
+      true
+    );
   }
 
   undo() {
