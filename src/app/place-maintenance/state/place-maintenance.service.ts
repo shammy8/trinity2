@@ -5,6 +5,7 @@ import {
 } from './place-maintenance.store';
 import { NgEntityService } from '@datorama/akita-ng-entity-service';
 import { PlaceMaintenanceWrapper } from './place-maintenance.model';
+import { ScrollState } from 'src/app/shared/models';
 
 @Injectable({ providedIn: 'root' })
 export class PlaceMaintenanceService extends NgEntityService<
@@ -22,5 +23,9 @@ export class PlaceMaintenanceService extends NgEntityService<
 
   updateFilter(areaCode: number | null) {
     this.store.updateFilter(areaCode);
+  }
+
+  setScrollState(scrollPosition: ScrollState) {
+    this.store.update({ scrollPosition });
   }
 }

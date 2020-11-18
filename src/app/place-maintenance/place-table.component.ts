@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { StateHistoryPlugin } from '@datorama/akita';
-import { Subscription } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { RoutedTabService } from '../routed-tab/state/routed-tab.service';
 import { Routes } from '../routes.model';
 import { PlaceMaintenance } from './state/place-maintenance.model';
@@ -70,11 +70,15 @@ export class PlaceTableComponent implements OnInit, OnDestroy {
       },
     }) as webix.ui.datatable;
 
-    this.placesSub = this.places$?.subscribe((places) => {
+    this.placesSub = combineLatest([
+      this.places$,
+      this.query.scrollState$,
+    ]).subscribe(([places, scrollState]) => {
       this.places = places;
       this.ui?.clearAll();
       this.ui?.parse(JSON.stringify(this.places), 'json');
       this.ui?.refresh();
+      this.ui?.scrollTo(scrollState.x, scrollState.y);
     });
 
     this.ui.resize();
@@ -114,6 +118,7 @@ export class PlaceTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.service.setScrollState(this.ui.getScrollState());
     this.ui?.destructor();
     this.placesSub?.unsubscribe();
     this.getSub?.unsubscribe();
