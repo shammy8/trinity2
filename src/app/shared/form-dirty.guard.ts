@@ -25,7 +25,7 @@ export class FormDirtyGuard implements CanDeactivate<any> {
 
     if (component.formIsDirty) {
       navigateAway = confirm(
-        'Unsaved changes. Are you sure you want to navigate away?'
+        'Unsaved changes. By navigating away your changes will not be saved. Are you sure you want to navigate away?'
       )
         ? true
         : false;

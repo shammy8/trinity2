@@ -7,6 +7,7 @@ import { PlaceMaintenanceComponent } from './place-maintenance.component';
 import { PlaceTableComponent } from './place-table.component';
 import { PlaceDetailComponent } from './place-detail.component';
 import { SharedModule } from '../shared/shared.module';
+import { FormDirtyGuard } from '../shared/form-dirty.guard';
 
 const routes: Routes = [
   {
@@ -15,7 +16,11 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'table' },
       { path: 'table', component: PlaceTableComponent },
-      { path: ':placeCode', component: PlaceDetailComponent },
+      {
+        path: ':placeCode',
+        component: PlaceDetailComponent,
+        canDeactivate: [FormDirtyGuard],
+      },
     ],
   },
 ];

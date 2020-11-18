@@ -50,6 +50,7 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
         this.ui?.destructor();
         this.toolbar?.destructor();
 
+        this.formIsDirty = false;
         this.place = place;
         this.populateForm();
       });
