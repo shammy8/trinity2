@@ -29,6 +29,7 @@ import { AreaMaintenanceService } from './state/area-maintenance.service';
       [listOfCurrentAreaCodes]="listOfCurrentAreaCodes"
       (save)="onSaveForm($event)"
       (delete)="onDelete()"
+      (formIsDirty)="formIsDirty = $event"
     ></trinity-area-detail>`,
   styles: [],
 })
@@ -48,6 +49,7 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
   @ViewChild('tableComponent') tableComponent: AreaTableComponent;
 
   private ui: webix.ui.toolbar;
+  formIsDirty: boolean = false;
 
   constructor(
     public service: AreaMaintenanceService,
@@ -115,6 +117,7 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
     this.service.setActive(area.code);
     this.activeArea = this.query.getActive();
     this.isAdding = false;
+    this.formIsDirty = false;
   }
 
   onSaveForm(newArea: AreaMaintenance) {
@@ -125,7 +128,10 @@ export class AreaMaintenanceComponent implements OnInit, OnDestroy {
           { areas: [newArea] },
           { mapResponseFn: (res: any) => res.areas[0] }
         )
-        .subscribe(() => (this.activeArea = this.query.getActive()));
+        .subscribe(() => {
+          this.activeArea = this.query.getActive(); // TODO do we need this?
+          this.formIsDirty = false;
+        });
     } else {
       this.addSub = this.service
         .add(

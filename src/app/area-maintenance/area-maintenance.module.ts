@@ -5,8 +5,15 @@ import { AreaMaintenanceComponent } from './area-maintenance.component';
 import { RouterModule, Routes } from '@angular/router';
 import { AreaTableComponent } from './area-table.component';
 import { AreaDetailComponent } from './area-detail.component';
+import { FormDirtyGuard } from '../shared/form-dirty.guard';
 
-const routes: Routes = [{ path: '', component: AreaMaintenanceComponent }];
+const routes: Routes = [
+  {
+    path: '',
+    component: AreaMaintenanceComponent,
+    canDeactivate: [FormDirtyGuard],
+  },
+];
 
 @NgModule({
   declarations: [

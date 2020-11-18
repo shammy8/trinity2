@@ -22,6 +22,7 @@ export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
   @Input() listOfCurrentAreaCodes: (number | null)[] = [];
   @Output() save = new EventEmitter<AreaMaintenance>();
   @Output() delete = new EventEmitter<number>();
+  @Output() formIsDirty = new EventEmitter<boolean>();
 
   private ui: webix.ui.form;
   private toolbar: webix.ui.toolbar;
@@ -101,6 +102,11 @@ export class AreaDetailComponent implements OnInit, OnChanges, OnDestroy {
         // ready: () => {
         //   this.ui?.validate();
         // },
+        on: {
+          onChange: () => {
+            this.formIsDirty.emit(this.ui.isDirty());
+          },
+        },
         rules: {
           code: (value: string) => {
             if (this.isAdding) {
