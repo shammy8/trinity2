@@ -1,9 +1,7 @@
 export interface PlaceMaintenance {
-  id: number | string;
+  code: string;
 }
 
 export function createPlaceMaintenance(params: Partial<PlaceMaintenance>) {
-  return {
-
-  } as PlaceMaintenance;
+  return {} as PlaceMaintenance;
 }

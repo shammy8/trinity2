@@ -1,37 +1,68 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { NotificationService } from './notification.service';
+import { RoutedTabQuery } from './routed-tab/state/routed-tab.query';
+import { RoutedTabService } from './routed-tab/state/routed-tab.service';
+import { TabInfo } from './routed-tab/state/routed-tab.store';
+import { Routes } from './routes.model';
 
 @Component({
   selector: 'trinity-root',
   template: `
-    <nav mat-tab-nav-bar backgroundColor="primary" animationDuration="2000ms">
-      <a
-        mat-tab-link
-        *ngFor="let link of links"
-        [routerLink]="link.path"
-        routerLinkActive
-        #rla="routerLinkActive"
-        [routerLinkActiveOptions]="{ exact: true }"
-        [active]="rla.isActive"
+    <mat-toolbar>
+      <span>A Better Trinity</span>
+      <span style="flex: 1 1 auto"></span>
+      <button
+        mat-button
+        color="primary"
+        (click)="addToTab({ path: 'area-maintenance', label: 'Area' })"
       >
-        {{ link.label }}
-      </a>
-    </nav>
-    <br />
+        Area
+      </button>
+      <button
+        mat-button
+        color="primary"
+        (click)="
+          addToTab({
+            path: 'place-maintenance',
+            label: 'Place',
+            tabName: routes.place
+          })
+        "
+      >
+        Place
+      </button>
+    </mat-toolbar>
+
+    <trinity-routed-tab
+      backgroundColor="primary"
+      [tabs]="links | async"
+      [tabName]="routes.primary"
+    >
+      <ng-template #label let-tab let-i="index" let-isActive="isActive">
+        <span
+          matBadge="{{ i }}"
+          matBadgeColor="accent"
+          matBadgeOverlap="false"
+          >{{ tab.path }}</span
+        >
+      </ng-template>
+    </trinity-routed-tab>
+
     <router-outlet></router-outlet>
   `,
   styles: [],
 })
 export class AppComponent implements OnInit {
-  links = [
-    { path: 'area-maintenance', label: 'Area' },
-    { path: 'place-maintenance', label: 'Place' },
-  ];
+  links: Observable<TabInfo[]> = this.routedTabQuery.primaryTabs$;
+  routes = Routes;
 
   constructor(
     private http: HttpClient,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private routedTabQuery: RoutedTabQuery,
+    private routedTabService: RoutedTabService
   ) {}
 
   ngOnInit() {
@@ -45,7 +76,7 @@ export class AppComponent implements OnInit {
     this.notificationService.listen();
   }
 
-  addNewTab() {
-    this.links.push({ path: 'place-maintenance', label: 'Place' });
+  addToTab(tabInfo: TabInfo) {
+    this.routedTabService.addTab(tabInfo, Routes.primary, true);
   }
 }

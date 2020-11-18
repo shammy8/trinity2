@@ -5,6 +5,7 @@ import { EntityState, EntityStore, StoreConfig } from '@datorama/akita';
 export interface PlaceMaintenanceState
   extends EntityState<PlaceMaintenance, string> {
   filter: { areaCode: number | null };
+  tabs: string[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -14,7 +15,7 @@ export interface PlaceMaintenanceState
 })
 export class PlaceMaintenanceStore extends EntityStore<PlaceMaintenanceState> {
   constructor() {
-    super({ filter: { areaCode: null } });
+    super({ filter: { areaCode: 1 }, tabs: [] });
   }
 
   updateFilter(areaCode: number | null) {
