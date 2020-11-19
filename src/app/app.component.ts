@@ -25,6 +25,19 @@ import { Routes } from './routes.model';
         color="primary"
         (click)="
           addToTab({
+            path: 'address-maintenance',
+            label: 'Address',
+            tabName: routes.address
+          })
+        "
+      >
+        Address
+      </button>
+      <button
+        mat-button
+        color="primary"
+        (click)="
+          addToTab({
             path: 'place-maintenance',
             label: 'Place',
             tabName: routes.place
@@ -45,7 +58,7 @@ import { Routes } from './routes.model';
           matBadge="{{ i }}"
           matBadgeColor="accent"
           matBadgeOverlap="false"
-          >{{ tab.path }}</span
+          >{{ tab.label }}</span
         >
       </ng-template>
     </trinity-routed-tab>

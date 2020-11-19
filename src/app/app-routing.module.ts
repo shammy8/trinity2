@@ -16,6 +16,13 @@ const routes: Routes = [
         (m) => m.PlaceMaintenanceModule
       ),
   },
+  {
+    path: 'address-maintenance',
+    loadChildren: () =>
+      import('./address-maintenance/address-maintenance.module').then(
+        (m) => m.AddressMaintenanceModule
+      ),
+  },
 ];
 
 @NgModule({

@@ -7,6 +7,7 @@ import { RoutedTabStore, RoutedTabState } from './routed-tab.store';
 export class RoutedTabQuery extends Query<RoutedTabState> {
   primaryTabs$ = this.select((state) => state[Routes.primary]);
   placeTabs$ = this.select((state) => state[Routes.place]);
+  addressTabs$ = this.select((state) => state[Routes.address]);
 
   constructor(protected store: RoutedTabStore) {
     super(store);
