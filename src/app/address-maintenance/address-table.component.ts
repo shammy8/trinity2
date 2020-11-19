@@ -1,7 +1,10 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { RouterQuery } from '@datorama/akita-ng-router-store';
 import { combineLatest, Subscription } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
+import { RoutedTabService } from '../routed-tab/state/routed-tab.service';
+import { Routes } from '../routes.model';
 import {
   AddressMaintenance,
   AddressMaintenanceWrapper,
@@ -11,7 +14,8 @@ import { AddressMaintenanceService } from './state/address-maintenance.service';
 
 @Component({
   selector: 'trinity-address-table',
-  template: `<div id="address-table" style="height: 500px"></div>`,
+  template: `<input [(ngModel)]="addressCodeFilter" />
+    <div id="address-table" style="height: 500px"></div>`,
 })
 export class AddressTableComponent implements OnInit, OnDestroy {
   addresses$ = this.query.selectAll();
@@ -19,6 +23,8 @@ export class AddressTableComponent implements OnInit, OnDestroy {
   addressesSub: Subscription;
 
   getSub: Subscription;
+
+  addressCodeFilter: string;
 
   private table: webix.ui.datatable;
   private columnConfig = [
@@ -38,10 +44,16 @@ export class AddressTableComponent implements OnInit, OnDestroy {
 
   constructor(
     private query: AddressMaintenanceQuery,
-    private service: AddressMaintenanceService
+    private service: AddressMaintenanceService,
+    private routedTabService: RoutedTabService,
+    private routerQuery: RouterQuery
   ) {}
 
   ngOnInit(): void {
+    this.routerQuery
+      .selectQueryParams('addressCode')
+      .subscribe((addressCode) => (this.addressCodeFilter = addressCode)); // TODO fix typing
+
     // only call api when there's no addresses in the store
     this.getSub = this.query
       .selectHasCache()
@@ -49,8 +61,8 @@ export class AddressTableComponent implements OnInit, OnDestroy {
         filter((hasCache) => !hasCache), // only continue to next step if don't have cache
         switchMap(() => {
           const params = new HttpParams()
-            .set('addressFrom', '')
-            .set('addressTo', 'A0140');
+            .set('addressFrom', this.addressCodeFilter)
+            .set('addressTo', this.addressCodeFilter);
           return this.service.get({
             mapResponseFn: (res: AddressMaintenanceWrapper) => res.addresses,
             params,
@@ -85,7 +97,12 @@ export class AddressTableComponent implements OnInit, OnDestroy {
     });
   }
 
-  onRowSelect(address: AddressMaintenance) {}
+  onRowSelect(address: AddressMaintenance) {
+    this.routedTabService.addTab(
+      { path: address.code, label: address.code },
+      Routes.address
+    );
+  }
 
   ngOnDestroy() {
     this.service.setScrollState(this.table.getScrollState());

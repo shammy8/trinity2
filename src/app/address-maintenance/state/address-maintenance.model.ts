@@ -1,5 +1,5 @@
 export interface AddressMaintenance {
-  id: string;
+  code: string;
 }
 
 export interface AddressMaintenanceWrapper {

@@ -6,6 +6,7 @@ import { AddressTableComponent } from './address-table.component';
 import { AddressDetailComponent } from './address-detail.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormDirtyGuard } from '../shared/form-dirty.guard';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -29,6 +30,11 @@ const routes: Routes = [
     AddressTableComponent,
     AddressDetailComponent,
   ],
-  imports: [CommonModule, RouterModule.forChild(routes), SharedModule],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    SharedModule,
+    FormsModule,
+  ],
 })
 export class AddressMaintenanceModule {}
