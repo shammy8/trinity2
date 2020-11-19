@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AreaTableComponent } from './area-table.component';
 import { AreaDetailComponent } from './area-detail.component';
 import { FormDirtyGuard } from '../shared/form-dirty.guard';
+import { PlaceMaintenanceComponent } from '../place-maintenance/place-maintenance.component';
 
 const routes: Routes = [
   {

@@ -221,10 +221,16 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
 
   onGoToAddress() {
     this.routedTabService.addTab(
-      { label: 'Area', path: 'area-maintenance' },
-      Routes.primary
+      {
+        label: `Address for ${this.place.code}`,
+        path: 'address',
+        queryParams: {
+          addressCode: `${this.place.addressCode}`,
+        },
+      },
+      Routes.place,
+      true
     );
-    this.router.navigate(['area-maintenance']);
   }
 
   ngOnDestroy() {

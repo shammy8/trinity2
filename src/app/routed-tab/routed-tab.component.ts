@@ -32,6 +32,7 @@ import { TabInfo } from './state/routed-tab.store';
         cdkDrag
         *ngFor="let tab of tabs; index as i"
         [routerLink]="tab.path"
+        [queryParams]="tab.queryParams"
         routerLinkActive
         #rla="routerLinkActive"
         [active]="rla.isActive"

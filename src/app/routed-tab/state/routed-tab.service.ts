@@ -64,7 +64,13 @@ export class RoutedTabService {
       this.router.navigate([tabInfo.path]);
     } else {
       const urlSegment = this.router.url.split('/');
-      this.router.navigate([urlSegment[1], tabInfo.path]);
+      if (!tabInfo.queryParams) {
+        this.router.navigate([urlSegment[1], tabInfo.path]);
+      } else {
+        this.router.navigate([urlSegment[1], tabInfo.path], {
+          queryParams: tabInfo.queryParams,
+        });
+      }
     }
   }
 

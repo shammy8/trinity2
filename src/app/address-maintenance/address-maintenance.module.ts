@@ -27,14 +27,10 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AddressMaintenanceComponent,
-    AddressTableComponent,
+    // AddressTableComponent,
     AddressDetailComponent,
   ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    SharedModule,
-    FormsModule,
-  ],
+  imports: [CommonModule, RouterModule.forChild(routes), SharedModule],
+  exports: [],
 })
 export class AddressMaintenanceModule {}

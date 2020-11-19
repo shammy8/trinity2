@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterQuery } from '@datorama/akita-ng-router-store';
-import { combineLatest, Subscription } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
 import { RoutedTabService } from '../routed-tab/state/routed-tab.service';
 import { Routes } from '../routes.model';
@@ -21,6 +21,7 @@ export class AddressTableComponent implements OnInit, OnDestroy {
   addresses$ = this.query.selectAll();
   addresses: AddressMaintenance[];
   addressesSub: Subscription;
+  getAddress$: Observable<any>;
 
   getSub: Subscription;
 
@@ -50,19 +51,40 @@ export class AddressTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.routerQuery
-      .selectQueryParams('addressCode')
-      .subscribe((addressCode) => (this.addressCodeFilter = addressCode)); // TODO fix typing
+    webix.ready(() => {
+      this.table = webix.ui({
+        id: 'address-table',
+        container: 'address-table',
+        view: 'datatable',
+        columns: this.columnConfig,
+        data: [],
+        select: 'row',
+        on: {
+          onAfterSelect: (id: number) =>
+            this.onRowSelect(this.table?.getItem(id)),
+        },
+      }) as webix.ui.datatable;
+      this.table.resize();
+    });
+
+    // .subscribe((addressCode: any) => (this.addressCodeFilter = addressCode)); // TODO fix typing
 
     // only call api when there's no addresses in the store
     this.getSub = this.query
       .selectHasCache()
       .pipe(
-        filter((hasCache) => !hasCache), // only continue to next step if don't have cache
-        switchMap(() => {
+        // filter((hasCache) => !hasCache), // only continue to next step if don't have cache
+        switchMap(() => this.routerQuery.selectQueryParams('addressCode')),
+        switchMap((addressCode: any) => {
+          console.log('get', addressCode);
+          // this.table?.destructor();
+          // this.getSub?.unsubscribe();
+          // this.addressesSub?.unsubscribe();
+
+          this.addressCodeFilter = addressCode;
           const params = new HttpParams()
-            .set('addressFrom', this.addressCodeFilter)
-            .set('addressTo', this.addressCodeFilter);
+            .set('addressFrom', addressCode || '')
+            .set('addressTo', addressCode || 'A0130');
           return this.service.get({
             mapResponseFn: (res: AddressMaintenanceWrapper) => res.addresses,
             params,
@@ -71,29 +93,24 @@ export class AddressTableComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-    this.table = webix.ui({
-      id: 'address-table',
-      container: 'address-table',
-      view: 'datatable',
-      columns: this.columnConfig,
-      data: [],
-      select: 'row',
-      on: {
-        onAfterSelect: (id: number) =>
-          this.onRowSelect(this.table?.getItem(id)),
-      },
-    }) as webix.ui.datatable;
-    this.table.resize();
+    // this.addressesSub = combineLatest([
+    //   this.addresses$,
+    //   this.query.scrollState$,
+    // ]).subscribe(([addresses, scrollState]) => {
+    //   console.log('draw', addresses);
+    //   this.addresses = addresses;
+    //   this.table?.clearAll();
+    //   this.table?.parse(JSON.stringify(this.addresses), 'json');
+    //   this.table?.refresh();
+    //   this.table?.scrollTo(scrollState.x, scrollState.y);
+    // });
 
-    this.addressesSub = combineLatest([
-      this.addresses$,
-      this.query.scrollState$,
-    ]).subscribe(([addresses, scrollState]) => {
+    this.addressesSub = this.addresses$.subscribe((addresses) => {
+      console.log('draw', addresses);
       this.addresses = addresses;
       this.table?.clearAll();
       this.table?.parse(JSON.stringify(this.addresses), 'json');
       this.table?.refresh();
-      this.table?.scrollTo(scrollState.x, scrollState.y);
     });
   }
 
@@ -105,8 +122,9 @@ export class AddressTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.service.setScrollState(this.table.getScrollState());
+    // this.service.setScrollState(this.table.getScrollState());
     this.table?.destructor();
     this.addressesSub?.unsubscribe();
+    this.getSub?.unsubscribe();
   }
 }

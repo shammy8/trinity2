@@ -11,9 +11,11 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { PlatformModule } from '@angular/cdk/platform';
 
 import { RoutedTabComponent } from '../routed-tab/routed-tab.component';
+import { AddressTableComponent } from '../address-maintenance/address-table.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [RoutedTabComponent],
+  declarations: [RoutedTabComponent, AddressTableComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -24,9 +26,11 @@ import { RoutedTabComponent } from '../routed-tab/routed-tab.component';
     MatIconModule,
     MatBadgeModule,
     PlatformModule,
+    FormsModule,
   ],
   exports: [
     CommonModule,
+    FormsModule,
     MatTabsModule,
     MatToolbarModule,
     MatButtonModule,
@@ -34,6 +38,7 @@ import { RoutedTabComponent } from '../routed-tab/routed-tab.component';
     RoutedTabComponent,
     MatBadgeModule,
     PlatformModule,
+    AddressTableComponent,
   ],
 })
 export class SharedModule {}

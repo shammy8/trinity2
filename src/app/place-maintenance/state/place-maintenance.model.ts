@@ -1,5 +1,6 @@
 export interface PlaceMaintenance {
   code: string;
+  addressCode: string;
 }
 
 export interface PlaceMaintenanceWrapper {

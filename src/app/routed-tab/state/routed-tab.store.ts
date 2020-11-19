@@ -29,4 +29,5 @@ export interface TabInfo {
   label: string;
   tabName?: Routes;
   unRemovable?: boolean;
+  queryParams?: { [key: string]: string };
 }
