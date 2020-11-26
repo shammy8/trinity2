@@ -50,19 +50,17 @@ export class AddressTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.routerQuery
-      .selectQueryParams('addressCode')
-      .subscribe((addressCode) => (this.addressCodeFilter = addressCode)); // TODO fix typing
-
     // only call api when there's no addresses in the store
     this.getSub = this.query
       .selectHasCache()
       .pipe(
-        filter((hasCache) => !hasCache), // only continue to next step if don't have cache
-        switchMap(() => {
+        // filter((hasCache) => !hasCache), // only continue to next step if don't have cache
+        switchMap(() => this.routerQuery.selectQueryParams('addressCode')),
+        switchMap((addressCode: any) => {
+          this.addressCodeFilter = addressCode;
           const params = new HttpParams()
-            .set('addressFrom', this.addressCodeFilter)
-            .set('addressTo', this.addressCodeFilter);
+            .set('addressFrom', addressCode || '')
+            .set('addressTo', addressCode || 'A0130');
           return this.service.get({
             mapResponseFn: (res: AddressMaintenanceWrapper) => res.addresses,
             params,
