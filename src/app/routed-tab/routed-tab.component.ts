@@ -19,6 +19,7 @@ import { TabInfo } from './state/routed-tab.store';
   styleUrls: ['routed-tab.component.scss'],
   template: `
     <nav
+      *ngIf="tabs?.length > 1"
       mat-tab-nav-bar
       cdkDropList
       [cdkDropListDisabled]="draggingDisabled"
